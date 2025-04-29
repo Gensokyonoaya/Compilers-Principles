@@ -14,7 +14,7 @@ SRCS := $(wildcard $(SRC_DIR)/*.cpp)
 OBJS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
 # 最终生成的可执行文件
-TARGET := lexer
+TARGET := lexer.exe
 
 # 默认目标
 all: $(TARGET)
