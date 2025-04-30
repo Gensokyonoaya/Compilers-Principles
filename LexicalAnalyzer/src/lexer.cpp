@@ -14,7 +14,6 @@ void Lexer::initialize_automaton() {
     fa.add_state(2, true, "INTEGER");    // 整数终止状态
     fa.add_state(3, true, "FLOAT");      // 浮点数终止状态
     fa.add_state(4, true, "SYMBOL_OF_END"); // 界符终止状态
-    fa.add_state(5, true, "END_OF_FILE"); // 文件结束符状态
 
     fa.add_state(6, true, "OPERATOR"); // 单字符运算符+-*、%终止状态
     fa.add_state(7, true, "OPERATOR"); // 双字符运算符终止状态
@@ -45,15 +44,6 @@ void Lexer::initialize_automaton() {
     }
     fa.add_transition(2, '.', 3); // 整数后可以接小数点，进入浮点数状态
 
-    // fa.add_transition(0, ';', 4); // 界符
-    // fa.add_transition(0, ',', 4); // 界符
-    // fa.add_transition(0, '(', 4); // 界符
-    // fa.add_transition(0, ')', 4); // 界符
-    // fa.add_transition(0, '{', 4); // 界符
-    // fa.add_transition(0, '}', 4); // 界符
-
-    //fa.add_transition(0, '\0', 5); // 文件结束符
-
     fa.add_transition(0, '+', 6); // 运算符
     fa.add_transition(0, '-', 6); // 运算符
     fa.add_transition(0, '*', 6); // 运算符
@@ -82,8 +72,8 @@ void Lexer::initialize_automaton() {
     fa.set_start_state(0);
     fa = fa.minimize();
     // 设置初始状态
-    fa.print(); // 打印自动机状态和转换规则
-    std::cout << "DFA has been initialized." << std::endl;
+    //fa.print(); // 打印自动机状态和转换规则
+    //std::cout << ">>>>>DFA has been initialized.<<<<<" << std::endl;
 }
 
 void Lexer::advance() {
@@ -106,7 +96,7 @@ Token Lexer::get_next_token() {
 
     // 检查是否到达文件末尾
     if (current_char == '\0') {
-        return Token(TokenType::END_OF_FILE, "");
+        return Token(TokenType::END_OF_INPUT, "");
     }
 
     if (current_char == ',' || current_char == ';' || current_char == '(' ||
@@ -131,7 +121,7 @@ Token Lexer::get_next_token() {
     if (fa.get_states().find(current_state) == fa.get_states().end() || 
         !fa.get_states().at(current_state).is_final) {
         std::cerr << "Error: Invalid state for token: " << lexeme << std::endl;
-        return Token(TokenType::END_OF_FILE, lexeme); // 返回错误 Token
+        return Token(TokenType::UNDEFINED, lexeme); // 返回错误 Token
     }
 
     if (fa.get_states().at(current_state).is_final) {
@@ -150,8 +140,6 @@ Token Lexer::get_next_token() {
             return Token(TokenType::FLOAT, lexeme);
         } else if (token_type == "SYMBOL_OF_END") {
             return Token(TokenType::SYMBOL_OF_END, lexeme);
-        } else if (token_type == "END_OF_FILE") {
-            return Token(TokenType::END_OF_FILE, "");
         } else if (token_type == "OPERATOR") {
             return Token(TokenType::OPERATOR, lexeme);
         }
@@ -159,15 +147,18 @@ Token Lexer::get_next_token() {
 
     // 如果没有匹配的状态，返回错误 Token
     std::cerr << "Error: Unrecognized token: " << lexeme << std::endl;
-    return Token(TokenType::END_OF_FILE, lexeme); // 返回错误 Token
+    return Token(TokenType::UNDEFINED, lexeme); // 返回错误 Token
 }
 
 std::vector<Token> Lexer::tokenize() {
     std::vector<Token> tokens;
     while (current_char != '\0') {
-        tokens.push_back(get_next_token());
+        Token token = get_next_token(); // 获取下一个 Token
+        if (token.get_type() == TokenType::END_OF_INPUT) {
+            break; // 到达输入末尾，停止分析
+        }
+        tokens.push_back(token);
     }
-    tokens.push_back(Token(TokenType::END_OF_FILE, ""));
     return tokens;
 }
 
