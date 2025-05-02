@@ -34,7 +34,7 @@
     
     ├── LexicalAnalyzer             // 词法分析器
     
-    │   ├── include     // 词法分析器include文件夹
+    │	├── include     // 词法分析器include文件夹
 
 	│		├── lexer.h // 词法分析器头文件
 
@@ -44,7 +44,7 @@
 
 	│		└── utils.h // 工具函数头文件
 
-    │   ├── src     // 词法分析器src文件夹
+    │	├── src     // 词法分析器src文件夹
 
 	│		├── lexer.cpp // 词法分析器实现
 
@@ -62,15 +62,15 @@
 
 	│   ├── include     // 语法分析器include文件夹
 
-	│	│	├── symbol_table.h // 符号表头文件
+	│		├── symbol_table.h // 符号表头文件
 
-	│	│	├── utils.h // 工具函数头文件
+	│		├── utils.h // 工具函数头文件
 
 	│   ├── src     // 语法分析器src文件夹
     
-	│	│	├── symbol_table.cpp // 符号表实现 
+	│		├── symbol_table.cpp // 符号表实现 
 
-	│	│	├── utils.cpp // 工具函数实现
+	│		├── utils.cpp // 工具函数实现
 
     └──                 // 
 
