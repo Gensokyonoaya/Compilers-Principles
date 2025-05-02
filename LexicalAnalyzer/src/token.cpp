@@ -51,7 +51,11 @@ std::string Token::get_value() const {
 std::string Token::to_string() const {
     std::ostringstream oss;
     int classes;
-    classes = tokenCodeMap[value]; // 获取 Token 的类别
+    if (tokenCodeMap.find(value) == tokenCodeMap.end()) {
+        classes = 0; // 如果没有找到，设置为 0
+    } else{
+        classes = tokenCodeMap[value]; // 获取 Token 的类别
+    }
     //oss << "Token(" << token_type_to_string(type) << ", \"" << value << "\")";
     oss << value << "\t" << "<" << token_type_to_string(type) << "," 
         << ((type == TokenType::IDENTIFIER) ? value : std::to_string(classes)) << ">";

@@ -1,10 +1,10 @@
 #include "lexer.h"
-#include "utils.h"
 #include <iostream>
 
 Lexer::Lexer(const std::string& source) : source_code(source), current_position(0) {
     current_char = source_code[current_position];
     initialize_automaton(); // 初始化有限自动机
+    tokens = tokenize(); // 进行词法分析
 }
 
 void Lexer::initialize_automaton() {
@@ -120,7 +120,8 @@ Token Lexer::get_next_token() {
     // 检查 current_state 是否是终止状态
     if (fa.get_states().find(current_state) == fa.get_states().end() || 
         !fa.get_states().at(current_state).is_final) {
-        std::cerr << "Error: Invalid state for token: " << lexeme << std::endl;
+        DEBUG_ERROR("Invalid state for token: " + lexeme);
+        // 如果没有匹配的状态，返回错误 Token
         return Token(TokenType::UNDEFINED, lexeme); // 返回错误 Token
     }
 
@@ -146,7 +147,7 @@ Token Lexer::get_next_token() {
     }
 
     // 如果没有匹配的状态，返回错误 Token
-    std::cerr << "Error: Unrecognized token: " << lexeme << std::endl;
+    DEBUG_ERROR("Unrecognized token: " + lexeme);
     return Token(TokenType::UNDEFINED, lexeme); // 返回错误 Token
 }
 
@@ -163,7 +164,6 @@ std::vector<Token> Lexer::tokenize() {
 }
 
 void Lexer::print_tokens() {
-    std::vector<Token> tokens = tokenize(); // 调用 tokenize 方法生成 Token 序列
     for (const Token& token : tokens) {
         std::cout << token.to_string() << std::endl; // 输出每个 Token 的字符串表示
     }

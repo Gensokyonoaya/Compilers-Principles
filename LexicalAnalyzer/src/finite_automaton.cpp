@@ -26,11 +26,11 @@ void FiniteAutomaton::set_start_state(int id) {
 // 获取 DFA 的下一个状态
 int FiniteAutomaton::get_next_state(int current_state, char input) const {
     if (transitions.find(current_state) == transitions.end()) {
-        //std::cerr << "Error: State " << current_state << " not found in transitions." << std::endl;
+        DEBUG_ERROR("State " + std::to_string(current_state) + " not found in transitions.");
         return -1;
     }
     if (transitions.at(current_state).find(input) == transitions.at(current_state).end()) {
-        //std::cerr << "Error: Input '" << input << "' not found for state " << current_state << "." << std::endl;
+        DEBUG_ERROR("Input '" + std::string(1, input) + "' not found for state " + std::to_string(current_state) + ".");
         return -1;
     }
     return transitions.at(current_state).at(input);
@@ -270,7 +270,7 @@ FiniteAutomaton FiniteAutomaton::minimize() const {
             minimized_dfa.set_start_state(0);
         }
     } else {
-        std::cerr << "Error: Start state not found in minimized DFA." << std::endl;
+        DEBUG_ERROR("Start state not found in minimized DFA.");
     }
 
     return minimized_dfa;
