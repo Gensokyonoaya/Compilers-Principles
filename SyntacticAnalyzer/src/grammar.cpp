@@ -2,6 +2,8 @@
 Grammar::Grammar(const std::string& grammarFile) {
     readGrammar(grammarFile);
     computeFirstSet(); // 计算 FIRST 集
+    computeFollowSet(); // 计算 FOLLOW 集
+    DEBUG_INFO("Grammar loaded successfully from " + grammarFile);
 }
 
 void Grammar::readGrammar(const std::string& grammarFile) {
@@ -217,6 +219,77 @@ void Grammar::printFirstSets() const {
     for (const auto& [nonTerminal, firstSet] : firstSets) {
         std::cout << nonTerminal << ": { ";
         for (const auto& symbol : firstSet) {
+            std::cout << symbol << " ";
+        }
+        std::cout << "}" << std::endl;
+    }
+}
+
+void Grammar::computeFollowSet() const {
+    // 初始化非终结符的 FOLLOW 集为空
+    for (const auto& nonTerminal : non_terminals)
+    {
+        followSets[nonTerminal] = {};
+    }
+    followSets[startSymbol].insert("$"); // 将起始符号的 FOLLOW 集初始化为 { $ }
+    
+    bool changed = true;
+    while (changed) {
+        changed = false;
+
+        // 遍历所有规则
+        for (const auto& [lhs, productions] : rules) {
+            for (const auto& production : productions) {
+                for (size_t i = 0; i < production.size(); ++i) {
+                    const std::string& symbol = production[i];
+                    if (isNonTerminal(symbol)) {
+                        // 检查后续符号
+                        if (i + 1 < production.size()) {
+                            const std::string& nextSymbol = production[i + 1];
+                            if (isTerminal(nextSymbol)) {
+                                // 如果后续符号是终结符，直接加入 FOLLOW 集
+                                if (followSets[symbol].insert(nextSymbol).second) {
+                                    changed = true;
+                                }
+                            } else if (isNonTerminal(nextSymbol)) {
+                                // 如果后续符号是非终结符，将其 FIRST 集（不含 ε）加入 FOLLOW 集
+                                const auto& firstSetOfNext = firstSets[nextSymbol];
+                                for (const auto& sym : firstSetOfNext) {
+                                    if (!isEpsilon(sym)) {
+                                        if (followSets[symbol].insert(sym).second) {
+                                            changed = true;
+                                        }
+                                    }
+                                }
+                                // 如果 FIRST 集包含 ε，将 FOLLOW(lhs) 加入 FOLLOW(symbol)
+                                if (firstSetOfNext.find("$") != firstSetOfNext.end()) {
+                                    for (const auto& followSym : followSets[lhs]) {
+                                        if (followSets[symbol].insert(followSym).second) {
+                                            changed = true;
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            // 如果是最后一个符号，将 FOLLOW(lhs) 加入 FOLLOW(symbol)
+                            for (const auto& followSym : followSets[lhs]) {
+                                if (followSets[symbol].insert(followSym).second) {
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Grammar::printFollowSets() const {
+    std::cout << "FOLLOW Sets:" << std::endl;
+    for (const auto& [nonTerminal, followSet] : followSets) {
+        std::cout << nonTerminal << ": { ";
+        for (const auto& symbol : followSet) {
             std::cout << symbol << " ";
         }
         std::cout << "}" << std::endl;

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "../include/token.h"
+#include "../include/grammar.h"
 
 class ParserTable {
 public:

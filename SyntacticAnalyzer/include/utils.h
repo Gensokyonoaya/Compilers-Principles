@@ -8,6 +8,7 @@
 #include <cctype>
 #include <algorithm>
 #include <vector>
+#include <set>
 
 // 日志开关：设置为 1 启用日志，设置为 0 禁用日志
 #define ENABLE_LOG 1
@@ -30,5 +31,6 @@
 
 void trim(std::string& str);
 std::vector<std::string> splitIntoSymbols(const std::string& segment);
+
 
 #endif // UTILS_H

@@ -31,6 +31,7 @@ int main() {
 
     // 打印 FIRST 集
     grammar.printFirstSets();
+    grammar.printFollowSets();
 
     return 0;
 }
