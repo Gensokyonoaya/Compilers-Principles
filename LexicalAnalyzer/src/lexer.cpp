@@ -96,7 +96,7 @@ Token Lexer::get_next_token() {
 
     // 检查是否到达文件末尾
     if (current_char == '\0') {
-        return Token(TokenType::END_OF_INPUT, "");
+        return Token(TokenType::END_OF_FILE, "");
     }
 
     if (current_char == ',' || current_char == ';' || current_char == '(' ||
@@ -155,7 +155,8 @@ std::vector<Token> Lexer::tokenize() {
     std::vector<Token> tokens;
     while (current_char != '\0') {
         Token token = get_next_token(); // 获取下一个 Token
-        if (token.get_type() == TokenType::END_OF_INPUT) {
+        if (token.get_type() == TokenType::END_OF_FILE) {
+            tokens.push_back(token); // 添加文件结束符 Token
             break; // 到达输入末尾，停止分析
         }
         tokens.push_back(token);

@@ -1,0 +1,123 @@
+#已将所有EBNF都转换为BNF和消除左递归
+#1.	Program -> compUnit;
+1.	Program -> compUnit eof;
+
+#2.	compUnit -> (decl | funcDef)* EOF; EOF设置在这里是何意味？已经在该到上面设置了
+	compUnit -> compUnitItem compUnit1;
+	compUnit1 -> compUnitItem compUnit1 | $;
+	compUnitItem -> decl | funcDef;
+
+3.	decl -> constDecl | varDecl;
+
+#4.	constDecl -> 'const' bType constDef (',' constDef)* ';';
+	constDecl -> 'const' bType constDef constDefList ';';
+	constDefList -> ',' constDef constDefList | $;
+
+5.	bType -> 'int' | 'float';
+
+6.	constDef -> Ident '=' constInitVal;
+
+7.	constInitVal -> constExp;
+
+#8.	varDecl -> bType varDef (',' varDef)* ';';
+	varDecl -> bType varDef varDefList ';';
+	varDefList -> ',' varDef varDefList | $;
+
+9.	varDef -> Ident | Ident '=' initVal;
+
+10.	initVal -> exp;
+
+#11.	funcDef -> funcType Ident '(' (funcFParams)? ')' block;
+	funcDef -> funcType Ident '(' funcFParamsOpt ')' block;
+	funcFParamsOpt -> funcFParams | $;
+
+12.	funcType -> 'void' | 'int';
+
+#13.	funcFParams -> funcFParam (',' funcFParam)*;
+	funcFParams -> funcFParam funcFParamsList;
+	funcFParamsList -> ',' funcFParam funcFParamsList | $;
+
+14.	funcFParam -> bType Ident;
+
+#15.	block -> '{' (blockItem)* '}';
+	block -> '{' blockItemList '}';
+	blockItemList -> blockItem blockItemList | $;
+
+16.	blockItem -> decl | stmt;
+
+#17.	stmt -> lVal '=' exp ';' | (exp)? ';' | block | 'if' '(' cond ')' stmt ('else' stmt)? | 'return' (exp)? ';';	
+	stmt -> lVal '=' exp ';' | expStmt | block | ifStmt | 'return' returnExpOpt ';';
+	expStmt -> exp ';' | ';';
+	ifStmt -> 'if' '(' cond ')' stmt elseStmtOpt;
+	elseStmtOpt -> 'else' stmt | $;
+	returnExpOpt -> exp | $;
+
+18.	exp -> addExp;
+
+19.	cond -> lOrExp;
+
+20.	lVal -> Ident;
+
+21.	primaryExp -> '(' exp ')' | lVal | number;
+
+22.	number -> IntConst | floatConst;
+
+#23.	unaryExp -> primaryExp | Ident '(' (funcRParams)? ')' | unaryOp unaryExp;
+	unaryExp -> primaryExp | Ident '(' funcRParamsOpt ')' | unaryOp unaryExp;
+	funcRParamsOpt -> funcRParams | $;
+
+#24.	unaryOp -> '+' | '-' | '!';
+#词法分析器的要求里没有'！'，这里暂且不加上去
+	unaryOp -> '+' | '-';
+
+#25.	funcRParams -> funcRParam (',' funcRParam)*;
+	funcRParams -> funcRParam funcRParamsList;
+	funcRParamsList -> ',' funcRParam funcRParamsList | $;
+
+26.	funcRParam -> exp;
+
+#27.	mulExp -> unaryExp | mulExp ('*' | '/' | '%') unaryExp;
+	mulExp -> unaryExp mulExpList;
+	mulExpList -> mulexpOp unaryExp mulExpList | $;
+	mulexpOp -> '*' | '/' | '%';
+
+
+#28.	addExp -> mulExp | addExp ('+' | '-') mulExp;
+	addExp -> mulExp addExpList;
+	addExpList -> addexpOp mulExp addExpList | $;
+	addexpOp -> '+' | '-';
+
+#29.	relExp -> addExp | relExp ('<' | '>' | '<=' | '>=') addExp;
+	relExp -> addExp relExpList;
+	relExpList -> relexpOp addExp relExpList | $;
+	relexpOp -> '<' | '>' | '<=' | '>=';
+
+#30.	eqExp -> relExp | eqExp ('==' | '!=') relExp;
+	eqExp -> relExp eqExpList;
+	eqExpList -> eqexpOp relExp eqExpList | $;
+	eqexpOp -> '==' | '!=';
+
+#31.	lAndExp -> eqExp | lAndExp '&&' eqExp;
+	lAndExp -> eqExp lAndExpList;
+	lAndExpList -> landexpOp eqExp lAndExpList | $;
+	landexpOp -> '&&';
+
+#32.	lOrExp -> lAndExp | lOrExp '||' lAndExp;
+	lOrExp -> lAndExp lOrExpList;
+	lOrExpList -> lorexpOp lAndExp lOrExpList | $;
+	lorexpOp -> '||';
+
+33.	constExp -> addExp;
+
+#34.	IntConst -> [0-9]+;
+	IntConst -> 'INT'; 
+
+#35.	Ident -> [a-zA-Z_][a-zA-Z_0-9]*;
+	Ident -> 'IDN';
+
+#36.	floatConst -> [0-9]+ '.' [0-9]+;
+	floatConst -> 'FLOAT';
+
+	eof -> 'EOF';
+#那就是说，EOF是一个token，表示文件结束符，而并非是一个语法规则
+#也就意味着token序列中最后一个token必须是EOF
