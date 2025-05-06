@@ -1,6 +1,7 @@
 #include "grammar.h"
 Grammar::Grammar(const std::string& grammarFile) {
     readGrammar(grammarFile);
+    computeFirstSet(); // 计算 FIRST 集
 }
 
 void Grammar::readGrammar(const std::string& grammarFile) {
@@ -73,7 +74,7 @@ bool Grammar::isTerminal(const std::string& symbol) const {
 }
 
 bool Grammar::isEpsilon(const std::string& symbol) const {
-    return symbol == "$" || symbol == "ε";
+    return symbol == "$";
 }
 
 std::set<std::string> Grammar::getTerminals() const {
@@ -142,61 +143,82 @@ void Grammar::printGrammar() const {
             for (const auto& symbol : production) {
                 std::cout << symbol << " ";
             }
-            std::cout << "| ";
+            if (&production != &rule.second.back()) {
+                std::cout << "| ";
+            }
         }
         std::cout << std::endl;
     }
 }
 
 void Grammar::computeFirstSet() const {
-    // 初始化每个终结符的 FIRST 集合为自身
+    // 初始化终结符的 FIRST 集合
     for (const auto& terminal : terminals) {
-        firstSets[terminal].insert(terminal);
+        firstSets[terminal] = {terminal};
     }
 
-    // 初始化每个非终结符的 FIRST 集合为空集合
+    // 初始化非终结符的 FIRST 集为空
     for (const auto& nonTerminal : non_terminals) {
-        firstSets[nonTerminal] = std::set<std::string>();
+        firstSets[nonTerminal] = {};
     }
 
-    // 计算 FIRST 集合
     bool changed = true;
     while (changed) {
         changed = false;
-        for (const auto& rule : rules) {
-            const std::string& nonTerminal = rule.first;
-            const auto& productions = rule.second;
 
+        // 遍历所有规则
+        for (const auto& [lhs, productions] : rules) {
             for (const auto& production : productions) {
+                bool addEpsilon = true; // 标记当前产生式是否能推出 ε
+                size_t beforeSize = firstSets[lhs].size();
+
                 for (const auto& symbol : production) {
                     if (isTerminal(symbol)) {
-                        // 若X∈Vn ，且有产生式X→a，a∈Vt，则a∈FIRST(X)
-                        if (firstSets[nonTerminal].insert(symbol).second) {
-                            changed = true;
-                        }
-                        break; // 终止当前产生式的处理
+                        // 如果是终结符，直接加入 FIRST 集
+                        firstSets[lhs].insert(symbol);
+                        addEpsilon = false; // 终结符不能推出 ε
+                        break;
                     } else if (isNonTerminal(symbol)) {
-                        // 如果是非终结符，加入其 FIRST 集合
-                        const auto& firstSet = getFirstSet(symbol);
-                        size_t oldSize = firstSets[nonTerminal].size();
-                        firstSets[nonTerminal].insert(firstSet.begin(), firstSet.end());
-                        if (firstSets[nonTerminal].size() > oldSize) {
-                            changed = true;
+                        // 如果是非终结符，将其 FIRST 集（不含 ε）加入当前非终结符的 FIRST 集
+                        const auto& firstSetOfSymbol = firstSets[symbol];
+                        for (const auto& sym : firstSetOfSymbol) {
+                            if (!isEpsilon(sym)) {
+                                firstSets[lhs].insert(sym);
+                            }
                         }
-                        if (firstSet.find("ε") == firstSet.end()) {
-                            break; // 如果 FIRST 集合不包含 ε，终止当前产生式的处理
+
+                        // 如果该非终结符的 FIRST 集不包含 ε，则停止
+                        if (firstSetOfSymbol.find("$") == firstSetOfSymbol.end()) {
+                            addEpsilon = false;
+                            break;
                         }
                     } else if (isEpsilon(symbol)) {
-                        // 如果是 ε，加入 FIRST 集合
-                        if (firstSets[nonTerminal].insert("$").second) {
-                            changed = true;
-                        }
-                        break; // 终止当前产生式的处理
-                    } else {
-                        DEBUG_ERROR("Unknown symbol: " + symbol);
+                        // 如果是 ε，直接跳过
+                        addEpsilon = true;
                     }
+                }
+
+                // 如果产生式的所有符号都能推出 ε，则将 ε 加入 FIRST 集
+                if (addEpsilon) {
+                    firstSets[lhs].insert("$");
+                }
+
+                // 检查是否有更新
+                if (firstSets[lhs].size() > beforeSize) {
+                    changed = true;
                 }
             }
         }
+    }
+}
+
+void Grammar::printFirstSets() const {
+    std::cout << "FIRST Sets:" << std::endl;
+    for (const auto& [nonTerminal, firstSet] : firstSets) {
+        std::cout << nonTerminal << ": { ";
+        for (const auto& symbol : firstSet) {
+            std::cout << symbol << " ";
+        }
+        std::cout << "}" << std::endl;
     }
 }

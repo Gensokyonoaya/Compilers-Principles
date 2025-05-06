@@ -36,6 +36,12 @@ public:
     // Function to print the grammar rules
     void printGrammar() const;
 
+    // Function to print the first sets
+    void printFirstSets() const;
+
+    // Function to print the follow sets
+    void printFollowSets() const;
+
     // Function to check if a string is a terminal
     bool isTerminal(const std::string& symbol) const;
 
