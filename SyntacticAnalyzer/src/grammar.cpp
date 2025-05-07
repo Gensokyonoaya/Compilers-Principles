@@ -98,6 +98,12 @@ std::vector<std::vector<std::string>> Grammar::getProductions(const std::string&
     }
     return {}; // Return an empty vector if the non-terminal is not found
 }
+std::set<std::string> Grammar::getFirstSet(const std::string& nonTerminal) const {
+    return firstSets[nonTerminal];
+}
+std::set<std::string> Grammar::getFollowSet(const std::string& nonTerminal) const {
+    return followSets[nonTerminal];
+}
 
 std::vector<std::vector<std::string>> Grammar::parseProduction(const std::string& production) {
     std::vector<std::vector<std::string>> productions;

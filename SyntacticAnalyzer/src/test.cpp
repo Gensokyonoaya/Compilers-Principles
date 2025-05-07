@@ -1,37 +1,28 @@
-#include "grammar.h"
+#include "parser_table.h"
 #include <iostream>
 
 int main() {
-    // 指定 grammar 文件路径
-    const std::string grammarFile = "d:/Homework/third/Compilers Principles/SyntacticAnalyzer/grammar.ini";
 
-    // 创建 Grammar 对象并读取文法
-    Grammar grammar(grammarFile);
+    // 创建 ParserTable 对象
+    ParserTable parserTable;
 
-    // 打印文法规则
-    grammar.printGrammar();
+    Grammar g = parserTable.getGrammar();
+    g.printGrammar();
+    g.printFirstSets();
+    g.printFollowSets();
+    
 
-    // 获取起始符号
-    std::string startSymbol = grammar.getStartSymbol();
-    std::cout << "Start Symbol: " << startSymbol << std::endl;
+    // 打印预测分析表
+    //std::cout << "===== Predictive Parsing Table =====" << std::endl;
+    //parserTable.printParseTable();
 
-    // 获取终结符和非终结符集合
-    std::set<std::string> terminals = grammar.getTerminals();
-    std::set<std::string> nonTerminals = grammar.getNonTerminals();
-    std::cout << "Terminals: ";
-    for (const auto& t : terminals) {
-        std::cout << t << " ";
+    // 检查是否是 LL(1) 文法
+    std::cout << "\n===== LL(1) Grammar Check =====" << std::endl;
+    if (parserTable.isLL1Grammar()) {
+        std::cout << "The grammar is LL(1)." << std::endl;
+    } else {
+        std::cout << "The grammar is NOT LL(1)." << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "Non-Terminals: ";
-    for (const auto& nt : nonTerminals) {
-        std::cout << nt << " ";
-    }
-    std::cout << std::endl;
-
-    // 打印 FIRST 集
-    grammar.printFirstSets();
-    grammar.printFollowSets();
 
     return 0;
 }

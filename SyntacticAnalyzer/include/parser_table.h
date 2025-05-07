@@ -7,6 +7,7 @@
 #include <vector>
 #include "../include/token.h"
 #include "../include/grammar.h"
+#include "../include/utils.h"
 
 class ParserTable {
 public:
@@ -14,13 +15,17 @@ public:
     
     // 构建预测分析表
     void buildParseTable();
+
+    Grammar getGrammar();
     
     // 打印预测分析表
     void printParseTable() const;
 
+    bool isLL1Grammar() const;
 
 private:
-    std::map<std::string, std::map<std::string, std::vector<std::string>>> parseTable;
+    std::map<std::string, std::map<std::string, std::vector<std::string>>> parseTable; // 预测分析表
+    Grammar grammar; // 文法对象
 };
 
 #endif
