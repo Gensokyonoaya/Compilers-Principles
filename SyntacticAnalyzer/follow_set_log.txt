@@ -12,13 +12,26 @@ Processing non-terminal: addexpOp in production: addExpList -> addexpOp mulExp a
   Added FIRST(mulExp) element + to FOLLOW(addexpOp)
   Added FIRST(mulExp) element - to FOLLOW(addexpOp)
   Added FIRST(mulExp) element FLOAT to FOLLOW(addexpOp)
-  Added FIRST(mulExp) element IDN to FOLLOW(addexpOp)
   Added FIRST(mulExp) element INT to FOLLOW(addexpOp)
 Processing non-terminal: mulExp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: addExpList in production: addExpList -> addexpOp mulExp addExpList
-Processing non-terminal: lVal in production: assignExp -> lVal = assignExp
-  Added terminal = to FOLLOW(lVal)
-Processing non-terminal: assignExp in production: assignExp -> lVal = assignExp
+Processing non-terminal: lVal in production: assignExp -> lVal lValSuffix
+  Added FIRST(lValSuffix) element != to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element % to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element && to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element ( to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element * to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element + to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element - to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element / to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element < to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element <= to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element = to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element == to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element > to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element >= to FOLLOW(lVal)
+  Added FIRST(lValSuffix) element || to FOLLOW(lVal)
+Processing non-terminal: lValSuffix in production: assignExp -> lVal lValSuffix
 Processing non-terminal: condExp in production: assignExp -> condExp
 Processing non-terminal: blockItemList in production: block -> { blockItemList }
   Added terminal } to FOLLOW(blockItemList)
@@ -34,7 +47,6 @@ Processing non-terminal: blockItem in production: blockItemList -> blockItem blo
   Added FIRST(blockItemList) element INT to FOLLOW(blockItem)
   Added FIRST(blockItemList) element const to FOLLOW(blockItem)
   Added FIRST(blockItemList) element float to FOLLOW(blockItem)
-  Added FIRST(blockItemList) element if to FOLLOW(blockItem)
   Added FIRST(blockItemList) element int to FOLLOW(blockItem)
   Added FIRST(blockItemList) element return to FOLLOW(blockItem)
   Added FIRST(blockItemList) element { to FOLLOW(blockItem)
@@ -84,7 +96,6 @@ Processing non-terminal: varDecl in production: decl -> varDecl
   Added FOLLOW(decl) element float to FOLLOW(varDecl)
   Added FOLLOW(decl) element int to FOLLOW(varDecl)
   Added FOLLOW(decl) element void to FOLLOW(varDecl)
-Processing non-terminal: stmt in production: elseStmtOpt -> else stmt
 Processing non-terminal: relExp in production: eqExp -> relExp eqExpList
   Added FIRST(eqExpList) element != to FOLLOW(relExp)
   Added FIRST(eqExpList) element == to FOLLOW(relExp)
@@ -94,7 +105,6 @@ Processing non-terminal: eqexpOp in production: eqExpList -> eqexpOp relExp eqEx
   Added FIRST(relExp) element + to FOLLOW(eqexpOp)
   Added FIRST(relExp) element - to FOLLOW(eqexpOp)
   Added FIRST(relExp) element FLOAT to FOLLOW(eqexpOp)
-  Added FIRST(relExp) element IDN to FOLLOW(eqexpOp)
   Added FIRST(relExp) element INT to FOLLOW(eqexpOp)
 Processing non-terminal: relExp in production: eqExpList -> eqexpOp relExp eqExpList
 Processing non-terminal: eqExpList in production: eqExpList -> eqexpOp relExp eqExpList
@@ -128,11 +138,6 @@ Processing non-terminal: funcRParamsList in production: funcRParams -> funcRPara
 Processing non-terminal: funcRParam in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParamsList in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParams in production: funcRParamsOpt -> funcRParams
-Processing non-terminal: exp in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-  Added terminal ) to FOLLOW(exp)
-Processing non-terminal: stmt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-  Added FIRST(elseStmtOpt) element else to FOLLOW(stmt)
-Processing non-terminal: elseStmtOpt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
 Processing non-terminal: exp in production: initVal -> exp
 Processing non-terminal: eqExp in production: lAndExp -> eqExp lAndExpList
   Added FIRST(lAndExpList) element && to FOLLOW(eqExp)
@@ -142,7 +147,6 @@ Processing non-terminal: landexpOp in production: lAndExpList -> landexpOp eqExp
   Added FIRST(eqExp) element + to FOLLOW(landexpOp)
   Added FIRST(eqExp) element - to FOLLOW(landexpOp)
   Added FIRST(eqExp) element FLOAT to FOLLOW(landexpOp)
-  Added FIRST(eqExp) element IDN to FOLLOW(landexpOp)
   Added FIRST(eqExp) element INT to FOLLOW(landexpOp)
 Processing non-terminal: eqExp in production: lAndExpList -> landexpOp eqExp lAndExpList
 Processing non-terminal: lAndExpList in production: lAndExpList -> landexpOp eqExp lAndExpList
@@ -154,24 +158,79 @@ Processing non-terminal: lorexpOp in production: lOrExpList -> lorexpOp lAndExp 
   Added FIRST(lAndExp) element + to FOLLOW(lorexpOp)
   Added FIRST(lAndExp) element - to FOLLOW(lorexpOp)
   Added FIRST(lAndExp) element FLOAT to FOLLOW(lorexpOp)
-  Added FIRST(lAndExp) element IDN to FOLLOW(lorexpOp)
   Added FIRST(lAndExp) element INT to FOLLOW(lorexpOp)
 Processing non-terminal: lAndExp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: lOrExpList in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: Ident in production: lVal -> Ident
+  Added FOLLOW(lVal) element != to FOLLOW(Ident)
+  Added FOLLOW(lVal) element % to FOLLOW(Ident)
+  Added FOLLOW(lVal) element && to FOLLOW(Ident)
+  Added FOLLOW(lVal) element * to FOLLOW(Ident)
+  Added FOLLOW(lVal) element + to FOLLOW(Ident)
+  Added FOLLOW(lVal) element - to FOLLOW(Ident)
+  Added FOLLOW(lVal) element / to FOLLOW(Ident)
+  Added FOLLOW(lVal) element < to FOLLOW(Ident)
+  Added FOLLOW(lVal) element <= to FOLLOW(Ident)
+  Added FOLLOW(lVal) element == to FOLLOW(Ident)
+  Added FOLLOW(lVal) element > to FOLLOW(Ident)
+  Added FOLLOW(lVal) element >= to FOLLOW(Ident)
+  Added FOLLOW(lVal) element || to FOLLOW(Ident)
+Processing non-terminal: assignExp in production: lValSuffix -> = assignExp
+Processing non-terminal: postfixExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(mulExpList) element % to FOLLOW(postfixExpList)
+  Added FIRST(mulExpList) element * to FOLLOW(postfixExpList)
+  Added FIRST(mulExpList) element / to FOLLOW(postfixExpList)
+  Added FIRST(addExpList) element + to FOLLOW(postfixExpList)
+  Added FIRST(addExpList) element - to FOLLOW(postfixExpList)
+  Added FIRST(relExpList) element < to FOLLOW(postfixExpList)
+  Added FIRST(relExpList) element <= to FOLLOW(postfixExpList)
+  Added FIRST(relExpList) element > to FOLLOW(postfixExpList)
+  Added FIRST(relExpList) element >= to FOLLOW(postfixExpList)
+  Added FIRST(eqExpList) element != to FOLLOW(postfixExpList)
+  Added FIRST(eqExpList) element == to FOLLOW(postfixExpList)
+  Added FIRST(lAndExpList) element && to FOLLOW(postfixExpList)
+  Added FIRST(lOrExpList) element || to FOLLOW(postfixExpList)
+Processing non-terminal: mulExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(addExpList) element + to FOLLOW(mulExpList)
+  Added FIRST(addExpList) element - to FOLLOW(mulExpList)
+  Added FIRST(relExpList) element < to FOLLOW(mulExpList)
+  Added FIRST(relExpList) element <= to FOLLOW(mulExpList)
+  Added FIRST(relExpList) element > to FOLLOW(mulExpList)
+  Added FIRST(relExpList) element >= to FOLLOW(mulExpList)
+  Added FIRST(eqExpList) element != to FOLLOW(mulExpList)
+  Added FIRST(eqExpList) element == to FOLLOW(mulExpList)
+  Added FIRST(lAndExpList) element && to FOLLOW(mulExpList)
+  Added FIRST(lOrExpList) element || to FOLLOW(mulExpList)
+Processing non-terminal: addExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(relExpList) element < to FOLLOW(addExpList)
+  Added FIRST(relExpList) element <= to FOLLOW(addExpList)
+  Added FIRST(relExpList) element > to FOLLOW(addExpList)
+  Added FIRST(relExpList) element >= to FOLLOW(addExpList)
+  Added FIRST(eqExpList) element != to FOLLOW(addExpList)
+  Added FIRST(eqExpList) element == to FOLLOW(addExpList)
+  Added FIRST(lAndExpList) element && to FOLLOW(addExpList)
+  Added FIRST(lOrExpList) element || to FOLLOW(addExpList)
+Processing non-terminal: relExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(eqExpList) element != to FOLLOW(relExpList)
+  Added FIRST(eqExpList) element == to FOLLOW(relExpList)
+  Added FIRST(lAndExpList) element && to FOLLOW(relExpList)
+  Added FIRST(lOrExpList) element || to FOLLOW(relExpList)
+Processing non-terminal: eqExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(lAndExpList) element && to FOLLOW(eqExpList)
+  Added FIRST(lOrExpList) element || to FOLLOW(eqExpList)
+Processing non-terminal: lAndExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+  Added FIRST(lOrExpList) element || to FOLLOW(lAndExpList)
+Processing non-terminal: lOrExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
 Processing non-terminal: unaryExp in production: mulExp -> unaryExp mulExpList
   Added FIRST(mulExpList) element % to FOLLOW(unaryExp)
   Added FIRST(mulExpList) element * to FOLLOW(unaryExp)
   Added FIRST(mulExpList) element / to FOLLOW(unaryExp)
 Processing non-terminal: mulExpList in production: mulExp -> unaryExp mulExpList
-  Added FOLLOW(mulExp) element + to FOLLOW(mulExpList)
-  Added FOLLOW(mulExp) element - to FOLLOW(mulExpList)
 Processing non-terminal: mulexpOp in production: mulExpList -> mulexpOp unaryExp mulExpList
   Added FIRST(unaryExp) element ( to FOLLOW(mulexpOp)
   Added FIRST(unaryExp) element + to FOLLOW(mulexpOp)
   Added FIRST(unaryExp) element - to FOLLOW(mulexpOp)
   Added FIRST(unaryExp) element FLOAT to FOLLOW(mulexpOp)
-  Added FIRST(unaryExp) element IDN to FOLLOW(mulexpOp)
   Added FIRST(unaryExp) element INT to FOLLOW(mulexpOp)
 Processing non-terminal: unaryExp in production: mulExpList -> mulexpOp unaryExp mulExpList
 Processing non-terminal: mulExpList in production: mulExpList -> mulexpOp unaryExp mulExpList
@@ -184,8 +243,7 @@ Processing non-terminal: funcRParamsOpt in production: postfixExpList -> ( funcR
   Added terminal ) to FOLLOW(funcRParamsOpt)
 Processing non-terminal: postfixExpList in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: exp in production: primaryExp -> ( exp )
-Processing non-terminal: lVal in production: primaryExp -> lVal
-  Added FOLLOW(primaryExp) element ( to FOLLOW(lVal)
+  Added terminal ) to FOLLOW(exp)
 Processing non-terminal: number in production: primaryExp -> number
   Added FOLLOW(primaryExp) element ( to FOLLOW(number)
 Processing non-terminal: addExp in production: relExp -> addExp relExpList
@@ -194,24 +252,17 @@ Processing non-terminal: addExp in production: relExp -> addExp relExpList
   Added FIRST(relExpList) element > to FOLLOW(addExp)
   Added FIRST(relExpList) element >= to FOLLOW(addExp)
 Processing non-terminal: relExpList in production: relExp -> addExp relExpList
-  Added FOLLOW(relExp) element != to FOLLOW(relExpList)
-  Added FOLLOW(relExp) element == to FOLLOW(relExpList)
 Processing non-terminal: relexpOp in production: relExpList -> relexpOp addExp relExpList
   Added FIRST(addExp) element ( to FOLLOW(relexpOp)
   Added FIRST(addExp) element + to FOLLOW(relexpOp)
   Added FIRST(addExp) element - to FOLLOW(relexpOp)
   Added FIRST(addExp) element FLOAT to FOLLOW(relexpOp)
-  Added FIRST(addExp) element IDN to FOLLOW(relexpOp)
   Added FIRST(addExp) element INT to FOLLOW(relexpOp)
 Processing non-terminal: addExp in production: relExpList -> relexpOp addExp relExpList
 Processing non-terminal: relExpList in production: relExpList -> relexpOp addExp relExpList
 Processing non-terminal: exp in production: returnExpOpt -> exp
 Processing non-terminal: expStmt in production: stmt -> expStmt
-  Added FOLLOW(stmt) element else to FOLLOW(expStmt)
 Processing non-terminal: block in production: stmt -> block
-  Added FOLLOW(stmt) element else to FOLLOW(block)
-Processing non-terminal: ifStmt in production: stmt -> ifStmt
-  Added FOLLOW(stmt) element else to FOLLOW(ifStmt)
 Processing non-terminal: returnExpOpt in production: stmt -> return returnExpOpt ;
   Added terminal ; to FOLLOW(returnExpOpt)
 Processing non-terminal: postfixExp in production: unaryExp -> postfixExp
@@ -223,7 +274,6 @@ Processing non-terminal: unaryOp in production: unaryExp -> unaryOp unaryExp
   Added FIRST(unaryExp) element + to FOLLOW(unaryOp)
   Added FIRST(unaryExp) element - to FOLLOW(unaryOp)
   Added FIRST(unaryExp) element FLOAT to FOLLOW(unaryOp)
-  Added FIRST(unaryExp) element IDN to FOLLOW(unaryOp)
   Added FIRST(unaryExp) element INT to FOLLOW(unaryOp)
 Processing non-terminal: unaryExp in production: unaryExp -> unaryOp unaryExp
 Processing non-terminal: bType in production: varDecl -> bType varDef varDefList ;
@@ -242,16 +292,16 @@ Processing non-terminal: initVal in production: verDefSuffix -> = initVal
   Added FOLLOW(verDefSuffix) element , to FOLLOW(initVal)
   Added FOLLOW(verDefSuffix) element ; to FOLLOW(initVal)
 Current FOLLOW sets after iteration 1:
-  FOLLOW(Ident) = { (, = }
+  FOLLOW(Ident) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
   FOLLOW(IntConst) = {  }
   FOLLOW(Program) = { EOF }
   FOLLOW(addExp) = { <, <=, >, >= }
-  FOLLOW(addExpList) = {  }
-  FOLLOW(addexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(addExpList) = { !=, &&, <, <=, ==, >, >=, || }
+  FOLLOW(addexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(assignExp) = {  }
   FOLLOW(bType) = { IDN }
-  FOLLOW(block) = { const, else, float, int, void }
-  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, { }
+  FOLLOW(block) = { const, float, int, void }
+  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(blockItemList) = { } }
   FOLLOW(compUnit) = { EOF }
   FOLLOW(compUnitItem) = { const, float, int, void }
@@ -262,12 +312,11 @@ Current FOLLOW sets after iteration 1:
   FOLLOW(constExp) = { ,, ; }
   FOLLOW(constInitVal) = { ,, ; }
   FOLLOW(decl) = { const, float, int, void }
-  FOLLOW(elseStmtOpt) = {  }
   FOLLOW(eqExp) = { && }
-  FOLLOW(eqExpList) = {  }
-  FOLLOW(eqexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(eqExpList) = { &&, || }
+  FOLLOW(eqexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(exp) = { ), ; }
-  FOLLOW(expStmt) = { else }
+  FOLLOW(expStmt) = {  }
   FOLLOW(floatConst) = {  }
   FOLLOW(funcDef) = { const, float, int, void }
   FOLLOW(funcFParam) = { , }
@@ -279,29 +328,29 @@ Current FOLLOW sets after iteration 1:
   FOLLOW(funcRParamsList) = {  }
   FOLLOW(funcRParamsOpt) = { ) }
   FOLLOW(funcType) = { IDN }
-  FOLLOW(ifStmt) = { else }
   FOLLOW(initVal) = { ,, ; }
   FOLLOW(lAndExp) = { || }
-  FOLLOW(lAndExpList) = {  }
+  FOLLOW(lAndExpList) = { || }
   FOLLOW(lOrExp) = {  }
   FOLLOW(lOrExpList) = {  }
-  FOLLOW(lVal) = { (, = }
-  FOLLOW(landexpOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(lorexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(lVal) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(lValSuffix) = {  }
+  FOLLOW(landexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(lorexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(mulExp) = { +, - }
-  FOLLOW(mulExpList) = { +, - }
-  FOLLOW(mulexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(mulExpList) = { !=, &&, +, -, <, <=, ==, >, >=, || }
+  FOLLOW(mulexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(number) = { ( }
   FOLLOW(postfixExp) = { %, *, / }
-  FOLLOW(postfixExpList) = {  }
+  FOLLOW(postfixExpList) = { !=, %, &&, *, +, -, /, <, <=, ==, >, >=, || }
   FOLLOW(primaryExp) = { ( }
   FOLLOW(relExp) = { !=, == }
-  FOLLOW(relExpList) = { !=, == }
-  FOLLOW(relexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(relExpList) = { !=, &&, ==, || }
+  FOLLOW(relexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(returnExpOpt) = { ; }
-  FOLLOW(stmt) = { else }
+  FOLLOW(stmt) = {  }
   FOLLOW(unaryExp) = { %, *, / }
-  FOLLOW(unaryOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(unaryOp) = { (, +, -, FLOAT, INT }
   FOLLOW(varDecl) = { const, float, int, void }
   FOLLOW(varDef) = { ,, ; }
   FOLLOW(varDefList) = { ; }
@@ -311,15 +360,11 @@ Iteration 2:
 Processing non-terminal: compUnit in production: Program -> compUnit
 Processing non-terminal: mulExp in production: addExp -> mulExp addExpList
 Processing non-terminal: addExpList in production: addExp -> mulExp addExpList
-  Added FOLLOW(addExp) element < to FOLLOW(addExpList)
-  Added FOLLOW(addExp) element <= to FOLLOW(addExpList)
-  Added FOLLOW(addExp) element > to FOLLOW(addExpList)
-  Added FOLLOW(addExp) element >= to FOLLOW(addExpList)
 Processing non-terminal: addexpOp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: mulExp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: addExpList in production: addExpList -> addexpOp mulExp addExpList
-Processing non-terminal: lVal in production: assignExp -> lVal = assignExp
-Processing non-terminal: assignExp in production: assignExp -> lVal = assignExp
+Processing non-terminal: lVal in production: assignExp -> lVal lValSuffix
+Processing non-terminal: lValSuffix in production: assignExp -> lVal lValSuffix
 Processing non-terminal: condExp in production: assignExp -> condExp
 Processing non-terminal: blockItemList in production: block -> { blockItemList }
 Processing non-terminal: decl in production: blockItem -> decl
@@ -330,7 +375,6 @@ Processing non-terminal: decl in production: blockItem -> decl
   Added FOLLOW(blockItem) element FLOAT to FOLLOW(decl)
   Added FOLLOW(blockItem) element IDN to FOLLOW(decl)
   Added FOLLOW(blockItem) element INT to FOLLOW(decl)
-  Added FOLLOW(blockItem) element if to FOLLOW(decl)
   Added FOLLOW(blockItem) element return to FOLLOW(decl)
   Added FOLLOW(blockItem) element { to FOLLOW(decl)
 Processing non-terminal: stmt in production: blockItem -> stmt
@@ -343,7 +387,6 @@ Processing non-terminal: stmt in production: blockItem -> stmt
   Added FOLLOW(blockItem) element INT to FOLLOW(stmt)
   Added FOLLOW(blockItem) element const to FOLLOW(stmt)
   Added FOLLOW(blockItem) element float to FOLLOW(stmt)
-  Added FOLLOW(blockItem) element if to FOLLOW(stmt)
   Added FOLLOW(blockItem) element int to FOLLOW(stmt)
   Added FOLLOW(blockItem) element return to FOLLOW(stmt)
   Added FOLLOW(blockItem) element { to FOLLOW(stmt)
@@ -373,7 +416,6 @@ Processing non-terminal: constDecl in production: decl -> constDecl
   Added FOLLOW(decl) element FLOAT to FOLLOW(constDecl)
   Added FOLLOW(decl) element IDN to FOLLOW(constDecl)
   Added FOLLOW(decl) element INT to FOLLOW(constDecl)
-  Added FOLLOW(decl) element if to FOLLOW(constDecl)
   Added FOLLOW(decl) element return to FOLLOW(constDecl)
   Added FOLLOW(decl) element { to FOLLOW(constDecl)
 Processing non-terminal: varDecl in production: decl -> varDecl
@@ -384,13 +426,10 @@ Processing non-terminal: varDecl in production: decl -> varDecl
   Added FOLLOW(decl) element FLOAT to FOLLOW(varDecl)
   Added FOLLOW(decl) element IDN to FOLLOW(varDecl)
   Added FOLLOW(decl) element INT to FOLLOW(varDecl)
-  Added FOLLOW(decl) element if to FOLLOW(varDecl)
   Added FOLLOW(decl) element return to FOLLOW(varDecl)
   Added FOLLOW(decl) element { to FOLLOW(varDecl)
-Processing non-terminal: stmt in production: elseStmtOpt -> else stmt
 Processing non-terminal: relExp in production: eqExp -> relExp eqExpList
 Processing non-terminal: eqExpList in production: eqExp -> relExp eqExpList
-  Added FOLLOW(eqExp) element && to FOLLOW(eqExpList)
 Processing non-terminal: eqexpOp in production: eqExpList -> eqexpOp relExp eqExpList
 Processing non-terminal: relExp in production: eqExpList -> eqexpOp relExp eqExpList
 Processing non-terminal: eqExpList in production: eqExpList -> eqexpOp relExp eqExpList
@@ -419,14 +458,9 @@ Processing non-terminal: funcRParam in production: funcRParamsList -> , funcRPar
 Processing non-terminal: funcRParamsList in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParams in production: funcRParamsOpt -> funcRParams
   Added FOLLOW(funcRParamsOpt) element ) to FOLLOW(funcRParams)
-Processing non-terminal: exp in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: stmt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: elseStmtOpt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-  Added FOLLOW(ifStmt) element else to FOLLOW(elseStmtOpt)
 Processing non-terminal: exp in production: initVal -> exp
 Processing non-terminal: eqExp in production: lAndExp -> eqExp lAndExpList
 Processing non-terminal: lAndExpList in production: lAndExp -> eqExp lAndExpList
-  Added FOLLOW(lAndExp) element || to FOLLOW(lAndExpList)
 Processing non-terminal: landexpOp in production: lAndExpList -> landexpOp eqExp lAndExpList
 Processing non-terminal: eqExp in production: lAndExpList -> landexpOp eqExp lAndExpList
 Processing non-terminal: lAndExpList in production: lAndExpList -> landexpOp eqExp lAndExpList
@@ -436,6 +470,14 @@ Processing non-terminal: lorexpOp in production: lOrExpList -> lorexpOp lAndExp 
 Processing non-terminal: lAndExp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: lOrExpList in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: Ident in production: lVal -> Ident
+Processing non-terminal: assignExp in production: lValSuffix -> = assignExp
+Processing non-terminal: postfixExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: mulExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: addExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: relExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: eqExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lAndExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lOrExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
 Processing non-terminal: unaryExp in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulExpList in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulexpOp in production: mulExpList -> mulexpOp unaryExp mulExpList
@@ -447,13 +489,9 @@ Processing non-terminal: floatConst in production: number -> floatConst
   Added FOLLOW(number) element ( to FOLLOW(floatConst)
 Processing non-terminal: primaryExp in production: postfixExp -> primaryExp postfixExpList
 Processing non-terminal: postfixExpList in production: postfixExp -> primaryExp postfixExpList
-  Added FOLLOW(postfixExp) element % to FOLLOW(postfixExpList)
-  Added FOLLOW(postfixExp) element * to FOLLOW(postfixExpList)
-  Added FOLLOW(postfixExp) element / to FOLLOW(postfixExpList)
 Processing non-terminal: funcRParamsOpt in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: postfixExpList in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: exp in production: primaryExp -> ( exp )
-Processing non-terminal: lVal in production: primaryExp -> lVal
 Processing non-terminal: number in production: primaryExp -> number
 Processing non-terminal: addExp in production: relExp -> addExp relExpList
 Processing non-terminal: relExpList in production: relExp -> addExp relExpList
@@ -471,7 +509,6 @@ Processing non-terminal: expStmt in production: stmt -> expStmt
   Added FOLLOW(stmt) element INT to FOLLOW(expStmt)
   Added FOLLOW(stmt) element const to FOLLOW(expStmt)
   Added FOLLOW(stmt) element float to FOLLOW(expStmt)
-  Added FOLLOW(stmt) element if to FOLLOW(expStmt)
   Added FOLLOW(stmt) element int to FOLLOW(expStmt)
   Added FOLLOW(stmt) element return to FOLLOW(expStmt)
   Added FOLLOW(stmt) element { to FOLLOW(expStmt)
@@ -483,23 +520,8 @@ Processing non-terminal: block in production: stmt -> block
   Added FOLLOW(stmt) element FLOAT to FOLLOW(block)
   Added FOLLOW(stmt) element IDN to FOLLOW(block)
   Added FOLLOW(stmt) element INT to FOLLOW(block)
-  Added FOLLOW(stmt) element if to FOLLOW(block)
   Added FOLLOW(stmt) element return to FOLLOW(block)
   Added FOLLOW(stmt) element { to FOLLOW(block)
-Processing non-terminal: ifStmt in production: stmt -> ifStmt
-  Added FOLLOW(stmt) element ( to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element + to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element - to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element ; to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element FLOAT to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element IDN to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element INT to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element const to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element float to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element if to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element int to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element return to FOLLOW(ifStmt)
-  Added FOLLOW(stmt) element { to FOLLOW(ifStmt)
 Processing non-terminal: returnExpOpt in production: stmt -> return returnExpOpt ;
 Processing non-terminal: postfixExp in production: unaryExp -> postfixExp
 Processing non-terminal: unaryOp in production: unaryExp -> unaryOp unaryExp
@@ -513,32 +535,31 @@ Processing non-terminal: varDef in production: varDefList -> , varDef varDefList
 Processing non-terminal: varDefList in production: varDefList -> , varDef varDefList
 Processing non-terminal: initVal in production: verDefSuffix -> = initVal
 Current FOLLOW sets after iteration 2:
-  FOLLOW(Ident) = { (, ,, = }
+  FOLLOW(Ident) = { !=, %, &&, (, *, +, ,, -, /, <, <=, =, ==, >, >=, || }
   FOLLOW(IntConst) = { ( }
   FOLLOW(Program) = { EOF }
   FOLLOW(addExp) = { <, <=, >, >= }
-  FOLLOW(addExpList) = { <, <=, >, >= }
-  FOLLOW(addexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(addExpList) = { !=, &&, <, <=, ==, >, >=, || }
+  FOLLOW(addexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(assignExp) = { ), ; }
   FOLLOW(bType) = { IDN }
-  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, void, { }
-  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, { }
+  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(blockItemList) = { } }
   FOLLOW(compUnit) = { EOF }
   FOLLOW(compUnitItem) = { const, float, int, void }
   FOLLOW(condExp) = { ,, ; }
-  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(constDef) = { ,, ; }
   FOLLOW(constDefList) = { ; }
   FOLLOW(constExp) = { ,, ; }
   FOLLOW(constInitVal) = { ,, ; }
-  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
-  FOLLOW(elseStmtOpt) = { else }
+  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(eqExp) = { && }
-  FOLLOW(eqExpList) = { && }
-  FOLLOW(eqexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(eqExpList) = { &&, || }
+  FOLLOW(eqexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(exp) = { ), ,, ; }
-  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(floatConst) = { ( }
   FOLLOW(funcDef) = { const, float, int, void }
   FOLLOW(funcFParam) = { , }
@@ -550,30 +571,30 @@ Current FOLLOW sets after iteration 2:
   FOLLOW(funcRParamsList) = {  }
   FOLLOW(funcRParamsOpt) = { ) }
   FOLLOW(funcType) = { IDN }
-  FOLLOW(ifStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
   FOLLOW(initVal) = { ,, ; }
   FOLLOW(lAndExp) = { || }
   FOLLOW(lAndExpList) = { || }
   FOLLOW(lOrExp) = {  }
   FOLLOW(lOrExpList) = {  }
-  FOLLOW(lVal) = { (, = }
-  FOLLOW(landexpOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(lorexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(lVal) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(lValSuffix) = {  }
+  FOLLOW(landexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(lorexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(mulExp) = { +, - }
-  FOLLOW(mulExpList) = { +, - }
-  FOLLOW(mulexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(mulExpList) = { !=, &&, +, -, <, <=, ==, >, >=, || }
+  FOLLOW(mulexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(number) = { ( }
   FOLLOW(postfixExp) = { %, *, / }
-  FOLLOW(postfixExpList) = { %, *, / }
+  FOLLOW(postfixExpList) = { !=, %, &&, *, +, -, /, <, <=, ==, >, >=, || }
   FOLLOW(primaryExp) = { ( }
   FOLLOW(relExp) = { !=, == }
-  FOLLOW(relExpList) = { !=, == }
-  FOLLOW(relexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(relExpList) = { !=, &&, ==, || }
+  FOLLOW(relexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(returnExpOpt) = { ; }
-  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(unaryExp) = { %, *, / }
-  FOLLOW(unaryOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(unaryOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(varDef) = { ,, ; }
   FOLLOW(varDefList) = { ; }
   FOLLOW(verDefSuffix) = { ,, ; }
@@ -585,8 +606,10 @@ Processing non-terminal: addExpList in production: addExp -> mulExp addExpList
 Processing non-terminal: addexpOp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: mulExp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: addExpList in production: addExpList -> addexpOp mulExp addExpList
-Processing non-terminal: lVal in production: assignExp -> lVal = assignExp
-Processing non-terminal: assignExp in production: assignExp -> lVal = assignExp
+Processing non-terminal: lVal in production: assignExp -> lVal lValSuffix
+Processing non-terminal: lValSuffix in production: assignExp -> lVal lValSuffix
+  Added FOLLOW(assignExp) element ) to FOLLOW(lValSuffix)
+  Added FOLLOW(assignExp) element ; to FOLLOW(lValSuffix)
 Processing non-terminal: condExp in production: assignExp -> condExp
   Added FOLLOW(assignExp) element ) to FOLLOW(condExp)
 Processing non-terminal: blockItemList in production: block -> { blockItemList }
@@ -613,7 +636,6 @@ Processing non-terminal: condExp in production: constExp -> condExp
 Processing non-terminal: constExp in production: constInitVal -> constExp
 Processing non-terminal: constDecl in production: decl -> constDecl
 Processing non-terminal: varDecl in production: decl -> varDecl
-Processing non-terminal: stmt in production: elseStmtOpt -> else stmt
 Processing non-terminal: relExp in production: eqExp -> relExp eqExpList
 Processing non-terminal: eqExpList in production: eqExp -> relExp eqExpList
 Processing non-terminal: eqexpOp in production: eqExpList -> eqexpOp relExp eqExpList
@@ -640,22 +662,6 @@ Processing non-terminal: funcRParamsList in production: funcRParams -> funcRPara
 Processing non-terminal: funcRParam in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParamsList in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParams in production: funcRParamsOpt -> funcRParams
-Processing non-terminal: exp in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: stmt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: elseStmtOpt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-  Added FOLLOW(ifStmt) element ( to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element + to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element - to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element ; to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element FLOAT to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element IDN to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element INT to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element const to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element float to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element if to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element int to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element return to FOLLOW(elseStmtOpt)
-  Added FOLLOW(ifStmt) element { to FOLLOW(elseStmtOpt)
 Processing non-terminal: exp in production: initVal -> exp
 Processing non-terminal: eqExp in production: lAndExp -> eqExp lAndExpList
 Processing non-terminal: lAndExpList in production: lAndExp -> eqExp lAndExpList
@@ -671,6 +677,14 @@ Processing non-terminal: lorexpOp in production: lOrExpList -> lorexpOp lAndExp 
 Processing non-terminal: lAndExp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: lOrExpList in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: Ident in production: lVal -> Ident
+Processing non-terminal: assignExp in production: lValSuffix -> = assignExp
+Processing non-terminal: postfixExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: mulExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: addExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: relExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: eqExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lAndExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lOrExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
 Processing non-terminal: unaryExp in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulExpList in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulexpOp in production: mulExpList -> mulexpOp unaryExp mulExpList
@@ -683,7 +697,6 @@ Processing non-terminal: postfixExpList in production: postfixExp -> primaryExp 
 Processing non-terminal: funcRParamsOpt in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: postfixExpList in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: exp in production: primaryExp -> ( exp )
-Processing non-terminal: lVal in production: primaryExp -> lVal
 Processing non-terminal: number in production: primaryExp -> number
 Processing non-terminal: addExp in production: relExp -> addExp relExpList
 Processing non-terminal: relExpList in production: relExp -> addExp relExpList
@@ -693,7 +706,6 @@ Processing non-terminal: relExpList in production: relExpList -> relexpOp addExp
 Processing non-terminal: exp in production: returnExpOpt -> exp
 Processing non-terminal: expStmt in production: stmt -> expStmt
 Processing non-terminal: block in production: stmt -> block
-Processing non-terminal: ifStmt in production: stmt -> ifStmt
 Processing non-terminal: returnExpOpt in production: stmt -> return returnExpOpt ;
 Processing non-terminal: postfixExp in production: unaryExp -> postfixExp
 Processing non-terminal: unaryOp in production: unaryExp -> unaryOp unaryExp
@@ -707,32 +719,31 @@ Processing non-terminal: varDef in production: varDefList -> , varDef varDefList
 Processing non-terminal: varDefList in production: varDefList -> , varDef varDefList
 Processing non-terminal: initVal in production: verDefSuffix -> = initVal
 Current FOLLOW sets after iteration 3:
-  FOLLOW(Ident) = { (, ,, = }
+  FOLLOW(Ident) = { !=, %, &&, (, *, +, ,, -, /, <, <=, =, ==, >, >=, || }
   FOLLOW(IntConst) = { ( }
   FOLLOW(Program) = { EOF }
   FOLLOW(addExp) = { <, <=, >, >= }
-  FOLLOW(addExpList) = { <, <=, >, >= }
-  FOLLOW(addexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(addExpList) = { !=, &&, <, <=, ==, >, >=, || }
+  FOLLOW(addexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(assignExp) = { ), ,, ; }
   FOLLOW(bType) = { IDN }
-  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, void, { }
-  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, { }
+  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(blockItemList) = { } }
   FOLLOW(compUnit) = { EOF }
   FOLLOW(compUnitItem) = { const, float, int, void }
   FOLLOW(condExp) = { ), ,, ; }
-  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(constDef) = { ,, ; }
   FOLLOW(constDefList) = { ; }
   FOLLOW(constExp) = { ,, ; }
   FOLLOW(constInitVal) = { ,, ; }
-  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
-  FOLLOW(elseStmtOpt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(eqExp) = { && }
-  FOLLOW(eqExpList) = { && }
-  FOLLOW(eqexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(eqExpList) = { &&, || }
+  FOLLOW(eqexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(exp) = { ), ,, ; }
-  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(floatConst) = { ( }
   FOLLOW(funcDef) = { const, float, int, void }
   FOLLOW(funcFParam) = { , }
@@ -744,30 +755,30 @@ Current FOLLOW sets after iteration 3:
   FOLLOW(funcRParamsList) = { ) }
   FOLLOW(funcRParamsOpt) = { ) }
   FOLLOW(funcType) = { IDN }
-  FOLLOW(ifStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
   FOLLOW(initVal) = { ,, ; }
   FOLLOW(lAndExp) = { || }
   FOLLOW(lAndExpList) = { || }
   FOLLOW(lOrExp) = { ), ,, ; }
   FOLLOW(lOrExpList) = { ), ,, ; }
-  FOLLOW(lVal) = { (, = }
-  FOLLOW(landexpOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(lorexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(lVal) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(lValSuffix) = { ), ; }
+  FOLLOW(landexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(lorexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(mulExp) = { +, - }
-  FOLLOW(mulExpList) = { +, - }
-  FOLLOW(mulexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(mulExpList) = { !=, &&, +, -, <, <=, ==, >, >=, || }
+  FOLLOW(mulexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(number) = { ( }
   FOLLOW(postfixExp) = { %, *, / }
-  FOLLOW(postfixExpList) = { %, *, / }
+  FOLLOW(postfixExpList) = { !=, %, &&, *, +, -, /, <, <=, ==, >, >=, || }
   FOLLOW(primaryExp) = { ( }
   FOLLOW(relExp) = { !=, == }
-  FOLLOW(relExpList) = { !=, == }
-  FOLLOW(relexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(relExpList) = { !=, &&, ==, || }
+  FOLLOW(relexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(returnExpOpt) = { ; }
-  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(unaryExp) = { %, *, / }
-  FOLLOW(unaryOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(unaryOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(varDef) = { ,, ; }
   FOLLOW(varDefList) = { ; }
   FOLLOW(verDefSuffix) = { ,, ; }
@@ -779,8 +790,9 @@ Processing non-terminal: addExpList in production: addExp -> mulExp addExpList
 Processing non-terminal: addexpOp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: mulExp in production: addExpList -> addexpOp mulExp addExpList
 Processing non-terminal: addExpList in production: addExpList -> addexpOp mulExp addExpList
-Processing non-terminal: lVal in production: assignExp -> lVal = assignExp
-Processing non-terminal: assignExp in production: assignExp -> lVal = assignExp
+Processing non-terminal: lVal in production: assignExp -> lVal lValSuffix
+Processing non-terminal: lValSuffix in production: assignExp -> lVal lValSuffix
+  Added FOLLOW(assignExp) element , to FOLLOW(lValSuffix)
 Processing non-terminal: condExp in production: assignExp -> condExp
 Processing non-terminal: blockItemList in production: block -> { blockItemList }
 Processing non-terminal: decl in production: blockItem -> decl
@@ -803,7 +815,6 @@ Processing non-terminal: condExp in production: constExp -> condExp
 Processing non-terminal: constExp in production: constInitVal -> constExp
 Processing non-terminal: constDecl in production: decl -> constDecl
 Processing non-terminal: varDecl in production: decl -> varDecl
-Processing non-terminal: stmt in production: elseStmtOpt -> else stmt
 Processing non-terminal: relExp in production: eqExp -> relExp eqExpList
 Processing non-terminal: eqExpList in production: eqExp -> relExp eqExpList
 Processing non-terminal: eqexpOp in production: eqExpList -> eqexpOp relExp eqExpList
@@ -828,9 +839,6 @@ Processing non-terminal: funcRParamsList in production: funcRParams -> funcRPara
 Processing non-terminal: funcRParam in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParamsList in production: funcRParamsList -> , funcRParam funcRParamsList
 Processing non-terminal: funcRParams in production: funcRParamsOpt -> funcRParams
-Processing non-terminal: exp in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: stmt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
-Processing non-terminal: elseStmtOpt in production: ifStmt -> if ( exp ) stmt elseStmtOpt
 Processing non-terminal: exp in production: initVal -> exp
 Processing non-terminal: eqExp in production: lAndExp -> eqExp lAndExpList
 Processing non-terminal: lAndExpList in production: lAndExp -> eqExp lAndExpList
@@ -843,6 +851,14 @@ Processing non-terminal: lorexpOp in production: lOrExpList -> lorexpOp lAndExp 
 Processing non-terminal: lAndExp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: lOrExpList in production: lOrExpList -> lorexpOp lAndExp lOrExpList
 Processing non-terminal: Ident in production: lVal -> Ident
+Processing non-terminal: assignExp in production: lValSuffix -> = assignExp
+Processing non-terminal: postfixExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: mulExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: addExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: relExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: eqExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lAndExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lOrExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
 Processing non-terminal: unaryExp in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulExpList in production: mulExp -> unaryExp mulExpList
 Processing non-terminal: mulexpOp in production: mulExpList -> mulexpOp unaryExp mulExpList
@@ -855,7 +871,6 @@ Processing non-terminal: postfixExpList in production: postfixExp -> primaryExp 
 Processing non-terminal: funcRParamsOpt in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: postfixExpList in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
 Processing non-terminal: exp in production: primaryExp -> ( exp )
-Processing non-terminal: lVal in production: primaryExp -> lVal
 Processing non-terminal: number in production: primaryExp -> number
 Processing non-terminal: addExp in production: relExp -> addExp relExpList
 Processing non-terminal: relExpList in production: relExp -> addExp relExpList
@@ -865,7 +880,6 @@ Processing non-terminal: relExpList in production: relExpList -> relexpOp addExp
 Processing non-terminal: exp in production: returnExpOpt -> exp
 Processing non-terminal: expStmt in production: stmt -> expStmt
 Processing non-terminal: block in production: stmt -> block
-Processing non-terminal: ifStmt in production: stmt -> ifStmt
 Processing non-terminal: returnExpOpt in production: stmt -> return returnExpOpt ;
 Processing non-terminal: postfixExp in production: unaryExp -> postfixExp
 Processing non-terminal: unaryOp in production: unaryExp -> unaryOp unaryExp
@@ -879,32 +893,31 @@ Processing non-terminal: varDef in production: varDefList -> , varDef varDefList
 Processing non-terminal: varDefList in production: varDefList -> , varDef varDefList
 Processing non-terminal: initVal in production: verDefSuffix -> = initVal
 Current FOLLOW sets after iteration 4:
-  FOLLOW(Ident) = { (, ,, = }
+  FOLLOW(Ident) = { !=, %, &&, (, *, +, ,, -, /, <, <=, =, ==, >, >=, || }
   FOLLOW(IntConst) = { ( }
   FOLLOW(Program) = { EOF }
   FOLLOW(addExp) = { <, <=, >, >= }
-  FOLLOW(addExpList) = { <, <=, >, >= }
-  FOLLOW(addexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(addExpList) = { !=, &&, <, <=, ==, >, >=, || }
+  FOLLOW(addexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(assignExp) = { ), ,, ; }
   FOLLOW(bType) = { IDN }
-  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, void, { }
-  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, { }
+  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(blockItemList) = { } }
   FOLLOW(compUnit) = { EOF }
   FOLLOW(compUnitItem) = { const, float, int, void }
   FOLLOW(condExp) = { ), ,, ; }
-  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(constDef) = { ,, ; }
   FOLLOW(constDefList) = { ; }
   FOLLOW(constExp) = { ,, ; }
   FOLLOW(constInitVal) = { ,, ; }
-  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
-  FOLLOW(elseStmtOpt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(eqExp) = { && }
-  FOLLOW(eqExpList) = { && }
-  FOLLOW(eqexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(eqExpList) = { &&, || }
+  FOLLOW(eqexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(exp) = { ), ,, ; }
-  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(floatConst) = { ( }
   FOLLOW(funcDef) = { const, float, int, void }
   FOLLOW(funcFParam) = { , }
@@ -916,30 +929,203 @@ Current FOLLOW sets after iteration 4:
   FOLLOW(funcRParamsList) = { ) }
   FOLLOW(funcRParamsOpt) = { ) }
   FOLLOW(funcType) = { IDN }
-  FOLLOW(ifStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
   FOLLOW(initVal) = { ,, ; }
   FOLLOW(lAndExp) = { || }
   FOLLOW(lAndExpList) = { || }
   FOLLOW(lOrExp) = { ), ,, ; }
   FOLLOW(lOrExpList) = { ), ,, ; }
-  FOLLOW(lVal) = { (, = }
-  FOLLOW(landexpOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(lorexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(lVal) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(lValSuffix) = { ), ,, ; }
+  FOLLOW(landexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(lorexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(mulExp) = { +, - }
-  FOLLOW(mulExpList) = { +, - }
-  FOLLOW(mulexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(mulExpList) = { !=, &&, +, -, <, <=, ==, >, >=, || }
+  FOLLOW(mulexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(number) = { ( }
   FOLLOW(postfixExp) = { %, *, / }
-  FOLLOW(postfixExpList) = { %, *, / }
+  FOLLOW(postfixExpList) = { !=, %, &&, *, +, -, /, <, <=, ==, >, >=, || }
   FOLLOW(primaryExp) = { ( }
   FOLLOW(relExp) = { !=, == }
-  FOLLOW(relExpList) = { !=, == }
-  FOLLOW(relexpOp) = { (, +, -, FLOAT, IDN, INT }
+  FOLLOW(relExpList) = { !=, &&, ==, || }
+  FOLLOW(relexpOp) = { (, +, -, FLOAT, INT }
   FOLLOW(returnExpOpt) = { ; }
-  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, else, float, if, int, return, { }
+  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
   FOLLOW(unaryExp) = { %, *, / }
-  FOLLOW(unaryOp) = { (, +, -, FLOAT, IDN, INT }
-  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, if, int, return, void, { }
+  FOLLOW(unaryOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(varDef) = { ,, ; }
+  FOLLOW(varDefList) = { ; }
+  FOLLOW(verDefSuffix) = { ,, ; }
+-----------------------------------
+Iteration 5:
+Processing non-terminal: compUnit in production: Program -> compUnit
+Processing non-terminal: mulExp in production: addExp -> mulExp addExpList
+Processing non-terminal: addExpList in production: addExp -> mulExp addExpList
+Processing non-terminal: addexpOp in production: addExpList -> addexpOp mulExp addExpList
+Processing non-terminal: mulExp in production: addExpList -> addexpOp mulExp addExpList
+Processing non-terminal: addExpList in production: addExpList -> addexpOp mulExp addExpList
+Processing non-terminal: lVal in production: assignExp -> lVal lValSuffix
+Processing non-terminal: lValSuffix in production: assignExp -> lVal lValSuffix
+Processing non-terminal: condExp in production: assignExp -> condExp
+Processing non-terminal: blockItemList in production: block -> { blockItemList }
+Processing non-terminal: decl in production: blockItem -> decl
+Processing non-terminal: stmt in production: blockItem -> stmt
+Processing non-terminal: blockItem in production: blockItemList -> blockItem blockItemList
+Processing non-terminal: blockItemList in production: blockItemList -> blockItem blockItemList
+Processing non-terminal: compUnitItem in production: compUnit -> compUnitItem compUnit
+Processing non-terminal: compUnit in production: compUnit -> compUnitItem compUnit
+Processing non-terminal: decl in production: compUnitItem -> decl
+Processing non-terminal: funcDef in production: compUnitItem -> funcDef
+Processing non-terminal: lOrExp in production: condExp -> lOrExp
+Processing non-terminal: bType in production: constDecl -> const bType constDef constDefList ;
+Processing non-terminal: constDef in production: constDecl -> const bType constDef constDefList ;
+Processing non-terminal: constDefList in production: constDecl -> const bType constDef constDefList ;
+Processing non-terminal: Ident in production: constDef -> Ident = constInitVal
+Processing non-terminal: constInitVal in production: constDef -> Ident = constInitVal
+Processing non-terminal: constDef in production: constDefList -> , constDef constDefList
+Processing non-terminal: constDefList in production: constDefList -> , constDef constDefList
+Processing non-terminal: condExp in production: constExp -> condExp
+Processing non-terminal: constExp in production: constInitVal -> constExp
+Processing non-terminal: constDecl in production: decl -> constDecl
+Processing non-terminal: varDecl in production: decl -> varDecl
+Processing non-terminal: relExp in production: eqExp -> relExp eqExpList
+Processing non-terminal: eqExpList in production: eqExp -> relExp eqExpList
+Processing non-terminal: eqexpOp in production: eqExpList -> eqexpOp relExp eqExpList
+Processing non-terminal: relExp in production: eqExpList -> eqexpOp relExp eqExpList
+Processing non-terminal: eqExpList in production: eqExpList -> eqexpOp relExp eqExpList
+Processing non-terminal: assignExp in production: exp -> assignExp
+Processing non-terminal: exp in production: expStmt -> exp ;
+Processing non-terminal: funcType in production: funcDef -> funcType Ident ( funcFParamsOpt ) block
+Processing non-terminal: Ident in production: funcDef -> funcType Ident ( funcFParamsOpt ) block
+Processing non-terminal: funcFParamsOpt in production: funcDef -> funcType Ident ( funcFParamsOpt ) block
+Processing non-terminal: block in production: funcDef -> funcType Ident ( funcFParamsOpt ) block
+Processing non-terminal: bType in production: funcFParam -> bType Ident
+Processing non-terminal: Ident in production: funcFParam -> bType Ident
+Processing non-terminal: funcFParam in production: funcFParams -> funcFParam funcFParamsList
+Processing non-terminal: funcFParamsList in production: funcFParams -> funcFParam funcFParamsList
+Processing non-terminal: funcFParam in production: funcFParamsList -> , funcFParam funcFParamsList
+Processing non-terminal: funcFParamsList in production: funcFParamsList -> , funcFParam funcFParamsList
+Processing non-terminal: funcFParams in production: funcFParamsOpt -> funcFParams
+Processing non-terminal: exp in production: funcRParam -> exp
+Processing non-terminal: funcRParam in production: funcRParams -> funcRParam funcRParamsList
+Processing non-terminal: funcRParamsList in production: funcRParams -> funcRParam funcRParamsList
+Processing non-terminal: funcRParam in production: funcRParamsList -> , funcRParam funcRParamsList
+Processing non-terminal: funcRParamsList in production: funcRParamsList -> , funcRParam funcRParamsList
+Processing non-terminal: funcRParams in production: funcRParamsOpt -> funcRParams
+Processing non-terminal: exp in production: initVal -> exp
+Processing non-terminal: eqExp in production: lAndExp -> eqExp lAndExpList
+Processing non-terminal: lAndExpList in production: lAndExp -> eqExp lAndExpList
+Processing non-terminal: landexpOp in production: lAndExpList -> landexpOp eqExp lAndExpList
+Processing non-terminal: eqExp in production: lAndExpList -> landexpOp eqExp lAndExpList
+Processing non-terminal: lAndExpList in production: lAndExpList -> landexpOp eqExp lAndExpList
+Processing non-terminal: lAndExp in production: lOrExp -> lAndExp lOrExpList
+Processing non-terminal: lOrExpList in production: lOrExp -> lAndExp lOrExpList
+Processing non-terminal: lorexpOp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
+Processing non-terminal: lAndExp in production: lOrExpList -> lorexpOp lAndExp lOrExpList
+Processing non-terminal: lOrExpList in production: lOrExpList -> lorexpOp lAndExp lOrExpList
+Processing non-terminal: Ident in production: lVal -> Ident
+Processing non-terminal: assignExp in production: lValSuffix -> = assignExp
+Processing non-terminal: postfixExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: mulExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: addExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: relExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: eqExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lAndExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: lOrExpList in production: lValSuffix -> postfixExpList mulExpList addExpList relExpList eqExpList lAndExpList lOrExpList
+Processing non-terminal: unaryExp in production: mulExp -> unaryExp mulExpList
+Processing non-terminal: mulExpList in production: mulExp -> unaryExp mulExpList
+Processing non-terminal: mulexpOp in production: mulExpList -> mulexpOp unaryExp mulExpList
+Processing non-terminal: unaryExp in production: mulExpList -> mulexpOp unaryExp mulExpList
+Processing non-terminal: mulExpList in production: mulExpList -> mulexpOp unaryExp mulExpList
+Processing non-terminal: IntConst in production: number -> IntConst
+Processing non-terminal: floatConst in production: number -> floatConst
+Processing non-terminal: primaryExp in production: postfixExp -> primaryExp postfixExpList
+Processing non-terminal: postfixExpList in production: postfixExp -> primaryExp postfixExpList
+Processing non-terminal: funcRParamsOpt in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
+Processing non-terminal: postfixExpList in production: postfixExpList -> ( funcRParamsOpt ) postfixExpList
+Processing non-terminal: exp in production: primaryExp -> ( exp )
+Processing non-terminal: number in production: primaryExp -> number
+Processing non-terminal: addExp in production: relExp -> addExp relExpList
+Processing non-terminal: relExpList in production: relExp -> addExp relExpList
+Processing non-terminal: relexpOp in production: relExpList -> relexpOp addExp relExpList
+Processing non-terminal: addExp in production: relExpList -> relexpOp addExp relExpList
+Processing non-terminal: relExpList in production: relExpList -> relexpOp addExp relExpList
+Processing non-terminal: exp in production: returnExpOpt -> exp
+Processing non-terminal: expStmt in production: stmt -> expStmt
+Processing non-terminal: block in production: stmt -> block
+Processing non-terminal: returnExpOpt in production: stmt -> return returnExpOpt ;
+Processing non-terminal: postfixExp in production: unaryExp -> postfixExp
+Processing non-terminal: unaryOp in production: unaryExp -> unaryOp unaryExp
+Processing non-terminal: unaryExp in production: unaryExp -> unaryOp unaryExp
+Processing non-terminal: bType in production: varDecl -> bType varDef varDefList ;
+Processing non-terminal: varDef in production: varDecl -> bType varDef varDefList ;
+Processing non-terminal: varDefList in production: varDecl -> bType varDef varDefList ;
+Processing non-terminal: Ident in production: varDef -> Ident verDefSuffix
+Processing non-terminal: verDefSuffix in production: varDef -> Ident verDefSuffix
+Processing non-terminal: varDef in production: varDefList -> , varDef varDefList
+Processing non-terminal: varDefList in production: varDefList -> , varDef varDefList
+Processing non-terminal: initVal in production: verDefSuffix -> = initVal
+Current FOLLOW sets after iteration 5:
+  FOLLOW(Ident) = { !=, %, &&, (, *, +, ,, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(IntConst) = { ( }
+  FOLLOW(Program) = { EOF }
+  FOLLOW(addExp) = { <, <=, >, >= }
+  FOLLOW(addExpList) = { !=, &&, <, <=, ==, >, >=, || }
+  FOLLOW(addexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(assignExp) = { ), ,, ; }
+  FOLLOW(bType) = { IDN }
+  FOLLOW(block) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(blockItem) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
+  FOLLOW(blockItemList) = { } }
+  FOLLOW(compUnit) = { EOF }
+  FOLLOW(compUnitItem) = { const, float, int, void }
+  FOLLOW(condExp) = { ), ,, ; }
+  FOLLOW(constDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(constDef) = { ,, ; }
+  FOLLOW(constDefList) = { ; }
+  FOLLOW(constExp) = { ,, ; }
+  FOLLOW(constInitVal) = { ,, ; }
+  FOLLOW(decl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
+  FOLLOW(eqExp) = { && }
+  FOLLOW(eqExpList) = { &&, || }
+  FOLLOW(eqexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(exp) = { ), ,, ; }
+  FOLLOW(expStmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
+  FOLLOW(floatConst) = { ( }
+  FOLLOW(funcDef) = { const, float, int, void }
+  FOLLOW(funcFParam) = { , }
+  FOLLOW(funcFParams) = { ) }
+  FOLLOW(funcFParamsList) = { ) }
+  FOLLOW(funcFParamsOpt) = { ) }
+  FOLLOW(funcRParam) = { , }
+  FOLLOW(funcRParams) = { ) }
+  FOLLOW(funcRParamsList) = { ) }
+  FOLLOW(funcRParamsOpt) = { ) }
+  FOLLOW(funcType) = { IDN }
+  FOLLOW(initVal) = { ,, ; }
+  FOLLOW(lAndExp) = { || }
+  FOLLOW(lAndExpList) = { || }
+  FOLLOW(lOrExp) = { ), ,, ; }
+  FOLLOW(lOrExpList) = { ), ,, ; }
+  FOLLOW(lVal) = { !=, %, &&, (, *, +, -, /, <, <=, =, ==, >, >=, || }
+  FOLLOW(lValSuffix) = { ), ,, ; }
+  FOLLOW(landexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(lorexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(mulExp) = { +, - }
+  FOLLOW(mulExpList) = { !=, &&, +, -, <, <=, ==, >, >=, || }
+  FOLLOW(mulexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(number) = { ( }
+  FOLLOW(postfixExp) = { %, *, / }
+  FOLLOW(postfixExpList) = { !=, %, &&, *, +, -, /, <, <=, ==, >, >=, || }
+  FOLLOW(primaryExp) = { ( }
+  FOLLOW(relExp) = { !=, == }
+  FOLLOW(relExpList) = { !=, &&, ==, || }
+  FOLLOW(relexpOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(returnExpOpt) = { ; }
+  FOLLOW(stmt) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, { }
+  FOLLOW(unaryExp) = { %, *, / }
+  FOLLOW(unaryOp) = { (, +, -, FLOAT, INT }
+  FOLLOW(varDecl) = { (, +, -, ;, FLOAT, IDN, INT, const, float, int, return, void, { }
   FOLLOW(varDef) = { ,, ; }
   FOLLOW(varDefList) = { ; }
   FOLLOW(verDefSuffix) = { ,, ; }

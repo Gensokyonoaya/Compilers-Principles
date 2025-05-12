@@ -429,6 +429,9 @@ void Grammar::analyzeIsLL1(){
                 for(auto& symbol : selectSet) {
                     if(intersection.find(symbol) != intersection.end()) {
                         isLL1 = false; // 发现冲突，标记为非 LL(1)
+                        std::cout << "Conflict found in SELECT set for " << lhs 
+                                  << ": " << join(intersection, ", ") 
+                                  << " and " << symbol << std::endl;
                         break;
                     }
                     intersection.insert(symbol);
