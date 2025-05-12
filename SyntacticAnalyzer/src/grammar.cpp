@@ -3,6 +3,8 @@ Grammar::Grammar(const std::string& grammarFile) {
     readGrammar(grammarFile);
     computeFirstSet(); // 计算 FIRST 集
     computeFollowSet(); // 计算 FOLLOW 集
+    computeSelectSet(); // 计算 SELECT 集
+    analyzeIsLL1(); // 分析文法是否是 LL(1) 文法
     DEBUG_INFO("Grammar loaded successfully from " + grammarFile);
 }
 
@@ -231,17 +233,56 @@ void Grammar::printFirstSets() const {
     }
 }
 
+
+template <typename T>
+std::string join(const std::set<T>& elements, const std::string& delimiter) {
+    std::ostringstream oss;
+    for (auto it = elements.begin(); it != elements.end(); ++it) {
+        if (it != elements.begin()) {
+            oss << delimiter;
+        }
+        oss << *it;
+    }
+    return oss.str();
+}
+
+template <typename T>
+std::string join(const std::vector<T>& elements, const std::string& delimiter) {
+    std::ostringstream oss;
+    for (size_t i = 0; i < elements.size(); ++i) {
+        if (i > 0) {
+            oss << delimiter;
+        }
+        oss << elements[i];
+    }
+    return oss.str();
+}
+
 void Grammar::computeFollowSet() const {
     // 初始化非终结符的 FOLLOW 集为空
     for (const auto& nonTerminal : non_terminals)
     {
         followSets[nonTerminal] = {};
     }
-    followSets[startSymbol].insert("$"); // 将起始符号的 FOLLOW 集初始化为 { $ }
+    followSets[startSymbol].insert("EOF"); // 将起始符号的 FOLLOW 集初始化为 { EOF }
+    DEBUG_INFO("Initialized FOLLOW set for start symbol: " + startSymbol + " -> { EOF }");
     
     bool changed = true;
+    size_t iteration = 0; // 用于记录迭代次数
+
+    // 打开日志文件
+    std::ofstream logFile("follow_set_log.txt");
+    if (!logFile.is_open()) {
+        DEBUG_ERROR("Failed to open log file for FOLLOW set computation.");
+        return;
+    }
+
+    logFile << "FOLLOW Set Computation Log\n";
+    logFile << "===========================\n";
+
     while (changed) {
         changed = false;
+        logFile << "Iteration " << ++iteration << ":\n";
 
         // 遍历所有规则
         for (const auto& [lhs, productions] : rules) {
@@ -249,38 +290,50 @@ void Grammar::computeFollowSet() const {
                 for (size_t i = 0; i < production.size(); ++i) {
                     const std::string& symbol = production[i];
                     if (isNonTerminal(symbol)) {
+                        logFile << "Processing non-terminal: " << symbol << " in production: " 
+                                << lhs << " -> " << join(production, " ") << "\n";
                         // 检查后续符号
                         if (i + 1 < production.size()) {
-                            const std::string& nextSymbol = production[i + 1];
-                            if (isTerminal(nextSymbol)) {
-                                // 如果后续符号是终结符，直接加入 FOLLOW 集
-                                if (followSets[symbol].insert(nextSymbol).second) {
-                                    changed = true;
-                                }
-                            } else if (isNonTerminal(nextSymbol)) {
-                                // 如果后续符号是非终结符，将其 FIRST 集（不含 ε）加入 FOLLOW 集
-                                const auto& firstSetOfNext = firstSets[nextSymbol];
-                                for (const auto& sym : firstSetOfNext) {
-                                    if (!isEpsilon(sym)) {
-                                        if (followSets[symbol].insert(sym).second) {
-                                            changed = true;
+                            bool addFollow = true;
+                            int pos = i + 1;
+                            while(pos < production.size() && addFollow){
+                                const std::string& nextSymbol = production[pos];
+                                if (isTerminal(nextSymbol)) {
+                                    // 如果后续符号是终结符，直接加入 FOLLOW 集
+                                    if (followSets[symbol].insert(nextSymbol).second) {
+                                        changed = true;
+                                        logFile << "  Added terminal " << nextSymbol 
+                                                << " to FOLLOW(" << symbol << ")\n";
+                                    }
+                                    break;
+                                } else if (isNonTerminal(nextSymbol)) {
+                                    // 如果后续符号是非终结符，将其 FIRST 集（不含 ε）加入 FOLLOW 集
+                                    const auto& firstSetOfNext = firstSets[nextSymbol];
+                                    for (const auto& sym : firstSetOfNext) {
+                                        if (!isEpsilon(sym)) {
+                                            if (followSets[symbol].insert(sym).second) {
+                                                changed = true;
+                                                logFile << "  Added FIRST(" << nextSymbol 
+                                                << ") element " << sym 
+                                                << " to FOLLOW(" << symbol << ")\n";
+                                            }
                                         }
                                     }
-                                }
-                                // 如果 FIRST 集包含 ε，将 FOLLOW(lhs) 加入 FOLLOW(symbol)
-                                if (firstSetOfNext.find("$") != firstSetOfNext.end()) {
-                                    for (const auto& followSym : followSets[lhs]) {
-                                        if (followSets[symbol].insert(followSym).second) {
-                                            changed = true;
-                                        }
+                                    // 如果 FIRST 集包不含 ε，
+                                    if (firstSetOfNext.find("$") == firstSetOfNext.end()) {
+                                        addFollow = false;
                                     }
                                 }
+                                pos++;
                             }
                         } else {
                             // 如果是最后一个符号，将 FOLLOW(lhs) 加入 FOLLOW(symbol)
                             for (const auto& followSym : followSets[lhs]) {
                                 if (followSets[symbol].insert(followSym).second) {
                                     changed = true;
+                                    logFile << "  Added FOLLOW(" << lhs 
+                                    << ") element " << followSym 
+                                    << " to FOLLOW(" << symbol << ")\n";
                                 }
                             }
                         }
@@ -288,7 +341,17 @@ void Grammar::computeFollowSet() const {
                 }
             }
         }
+        // 输出当前 FOLLOW 集状态
+        logFile << "Current FOLLOW sets after iteration " << iteration << ":\n";
+        for (const auto& [nonTerminal, followSet] : followSets) {
+            logFile << "  FOLLOW(" << nonTerminal << ") = { " 
+                    << join(followSet, ", ") << " }\n";
+        }
+        logFile << "-----------------------------------\n";
     }
+    logFile << "FOLLOW set computation completed.\n";
+    logFile.close();
+    DEBUG_INFO("FOLLOW set computation log written to follow_set_log.txt");
 }
 
 void Grammar::printFollowSets() const {
@@ -299,5 +362,84 @@ void Grammar::printFollowSets() const {
             std::cout << symbol << " ";
         }
         std::cout << "}" << std::endl;
+    }
+}
+
+void Grammar::computeSelectSet() const {
+    // 计算 SELECT 集
+    for (const auto& [lhs, productions] : rules) {
+        for (const auto& production : productions) {
+            std::set<std::string> selectSet;
+            bool addEpsilon = true; // 标记当前产生式是否能推出 ε
+            std::pair<std::string, std::vector<std::string>> selectPair(lhs, production);
+            for (const auto& symbol : production) {
+                if (isTerminal(symbol)) {
+                    selectSet.insert(symbol);
+                    addEpsilon = false;
+                    break; // 终结符，停止
+                } else if (isNonTerminal(symbol)) {
+                    const auto& firstOfSymbol = firstSets.at(symbol);
+                    selectSet.insert(firstOfSymbol.begin(), firstOfSymbol.end());
+                    if (firstOfSymbol.find("$") == firstOfSymbol.end()) {
+                        addEpsilon = false; // 非终结符且不包含 ε，停止
+                        break; // 非终结符且不包含 ε，停止
+                    }
+                } else if (isEpsilon(symbol)) {
+                    // 如果是 ε，继续
+                    continue;
+                }
+            }
+            // 如果产生式的所有符号都能推出 ε，则将 FOLLOW 集加入 SELECT 集
+            if (addEpsilon) {
+                const auto& followSet = followSets.at(lhs);
+                selectSet.insert(followSet.begin(), followSet.end());
+            }
+            // 将 SELECT 集添加到SelectSets中
+            selectSets[selectPair] = selectSet;
+        }
+    }
+}
+
+void Grammar::printSelectSets() const {
+    std::cout << "SELECT Sets:" << std::endl;
+    for (const auto& [pair, selectSet] : selectSets) {
+        std::cout << "SELECT(" << pair.first << " -> ";
+        for (const auto& symbol : pair.second) {
+            std::cout << symbol << " ";
+        }
+        std::cout << ") = { ";
+        for (const auto& symbol : selectSet) {
+            std::cout << symbol << " ";
+        }
+        std::cout << "}" << std::endl;
+    }
+    std::cout << std::endl;
+}
+
+void Grammar::analyzeIsLL1(){
+    // 分析文法是否是 LL(1) 文法
+    isLL1 = true; // 默认是 LL(1) 文法
+
+    // 检查 SELECT 集是否有冲突
+    for(auto& [lhs, _] : rules) {
+        std::set<std::string> intersection;
+        for(auto& [pair, selectSet] : selectSets) {
+            if(pair.first == lhs) {
+                // 检查 SELECT 集是否有交集
+                for(auto& symbol : selectSet) {
+                    if(intersection.find(symbol) != intersection.end()) {
+                        isLL1 = false; // 发现冲突，标记为非 LL(1)
+                        break;
+                    }
+                    intersection.insert(symbol);
+                }
+            }
+            if(!isLL1) {
+                break; // 发现冲突，提前退出
+            }
+        }
+        if(!isLL1) {
+            break; // 发现冲突，提前退出
+        }
     }
 }

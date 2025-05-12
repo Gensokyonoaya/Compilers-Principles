@@ -42,6 +42,8 @@ public:
     // Function to print the follow sets
     void printFollowSets() const;
 
+    void printSelectSets() const;
+
     // Function to check if a string is a terminal
     bool isTerminal(const std::string& symbol) const;
 
@@ -59,6 +61,8 @@ public:
     // Function to get the start symbol of the grammar
     std::string getStartSymbol() const;
 
+    bool isLL1Grammar() const { return isLL1; }; // Check if the grammar is LL(1)
+
     // Function to get the grammar rules
     const std::map<std::string, std::vector<std::vector<std::string>>>& getRules() const;
 
@@ -72,6 +76,8 @@ private:
     // Function to compute the follow set of a non-terminal
     void computeFollowSet() const;
 
+    void computeSelectSet() const; // Function to compute the select set of a production
+
     // Grammar rules
     std::map<std::string, std::vector<std::vector<std::string>>> rules;
 
@@ -84,11 +90,18 @@ private:
     // Start symbol
     std::string startSymbol;
 
+    bool isLL1; // Flag to indicate if the grammar is LL(1)
+
+    void analyzeIsLL1(); // Function to analyze if the grammar is LL(1)
+
     // First sets
     mutable std::map<std::string, std::set<std::string>> firstSets;
 
     // Follow sets
     mutable std::map<std::string, std::set<std::string>> followSets;
+
+    // Select sets
+    mutable std::map<std::pair<std::string, std::vector<std::string>>, std::set<std::string>> selectSets;
 };
 
 

@@ -10,6 +10,7 @@ int main() {
     g.printGrammar();
     g.printFirstSets();
     g.printFollowSets();
+    g.printSelectSets();
     
 
     // 打印预测分析表
@@ -17,11 +18,10 @@ int main() {
     //parserTable.printParseTable();
 
     // 检查是否是 LL(1) 文法
-    std::cout << "\n===== LL(1) Grammar Check =====" << std::endl;
-    if (parserTable.isLL1Grammar()) {
+    if(g.isLL1Grammar()) {
         std::cout << "The grammar is LL(1)." << std::endl;
     } else {
-        std::cout << "The grammar is NOT LL(1)." << std::endl;
+        std::cout << "The grammar is not LL(1)." << std::endl;
     }
 
     return 0;
