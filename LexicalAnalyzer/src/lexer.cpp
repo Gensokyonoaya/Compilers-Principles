@@ -96,7 +96,7 @@ Token Lexer::get_next_token() {
 
     // 检查是否到达文件末尾
     if (current_char == '\0') {
-        return Token(TokenType::END_OF_FILE, "");
+        return Token(TokenType::END_OF_FILE, "EOF");
     }
 
     if (current_char == ',' || current_char == ';' || current_char == '(' ||

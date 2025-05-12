@@ -9,6 +9,7 @@
 #include "../include/grammar.h"
 #include "../include/utils.h"
 
+using ParseTable = std::map<std::pair<std::string, std::string>, Production>; // 预测分析表类型
 class ParserTable {
 public:
     ParserTable();
@@ -17,12 +18,17 @@ public:
     void buildParseTable();
 
     Grammar getGrammar();
+
+    // 获取预测分析表
+    ParseTable getParseTable() const {
+        return parseTable;
+    }
     
     // 打印预测分析表
     void printParseTable() const;
 
 private:
-    std::map<std::string, std::map<std::string, std::vector<std::string>>> parseTable; // 预测分析表
+    ParseTable parseTable; // 预测分析表
     Grammar grammar; // 文法对象
 };
 

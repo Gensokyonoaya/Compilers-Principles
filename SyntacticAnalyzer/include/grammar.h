@@ -12,6 +12,9 @@
 #include <cctype>
 #include "utils.h"
 
+using Production = std::vector<std::string>;
+using SelectSets = std::map<std::pair<std::string, Production>, std::set<std::string>>;
+
 class Grammar {
 public:
     // Constructor
@@ -25,13 +28,18 @@ public:
     void insertNonTerminal(const std::string& nonTerminal); // Insert a non-terminal into the grammar
 
     // Function to parse a production string into symbols
-    std::vector<std::vector<std::string>> parseProduction(const std::string& production);
+    std::vector<Production> parseProduction(const std::string& production);
 
     // Function to get the first set of a non-terminal
     std::set<std::string> getFirstSet(const std::string& nonTerminal) const;
 
     // Function to get the follow set of a non-terminal
     std::set<std::string> getFollowSet(const std::string& nonTerminal) const;
+
+    // Function to get the select set of a production
+    std::map<std::pair<std::string, Production>, std::set<std::string>> getSelectSets() const {
+        return selectSets;
+    };
 
     // Function to print the grammar rules
     void printGrammar() const;
@@ -53,7 +61,7 @@ public:
     bool isEpsilon(const std::string& symbol) const; // Check if a string is epsilon
 
     // Function to get the productions for a non-terminal
-    std::vector<std::vector<std::string>> getProductions(const std::string& nonTerminal) const;
+    std::vector<Production> getProductions(const std::string& nonTerminal) const;
 
     std::set<std::string> getTerminals() const; // Get the set of terminals
     std::set<std::string> getNonTerminals() const; // Get the set of non-terminals
@@ -64,7 +72,7 @@ public:
     bool isLL1Grammar() const { return isLL1; }; // Check if the grammar is LL(1)
 
     // Function to get the grammar rules
-    const std::map<std::string, std::vector<std::vector<std::string>>>& getRules() const;
+    const std::map<std::string, std::vector<Production>>& getRules() const;
 
 private:
     // Function to read the grammar from a file
@@ -79,7 +87,7 @@ private:
     void computeSelectSet() const; // Function to compute the select set of a production
 
     // Grammar rules
-    std::map<std::string, std::vector<std::vector<std::string>>> rules;
+    std::map<std::string, std::vector<Production>> rules;
 
     // Set of terminals
     std::set<std::string> terminals;
@@ -101,7 +109,7 @@ private:
     mutable std::map<std::string, std::set<std::string>> followSets;
 
     // Select sets
-    mutable std::map<std::pair<std::string, std::vector<std::string>>, std::set<std::string>> selectSets;
+    mutable SelectSets selectSets;
 };
 
 

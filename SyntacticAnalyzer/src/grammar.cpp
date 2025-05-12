@@ -268,21 +268,21 @@ void Grammar::computeFollowSet() const {
     DEBUG_INFO("Initialized FOLLOW set for start symbol: " + startSymbol + " -> { EOF }");
     
     bool changed = true;
-    size_t iteration = 0; // 用于记录迭代次数
+    //size_t iteration = 0; // 用于记录迭代次数
 
     // 打开日志文件
-    std::ofstream logFile("follow_set_log.txt");
-    if (!logFile.is_open()) {
-        DEBUG_ERROR("Failed to open log file for FOLLOW set computation.");
-        return;
-    }
+    // std::ofstream logFile("follow_set_log.txt");
+    // if (!logFile.is_open()) {
+    //     DEBUG_ERROR("Failed to open log file for FOLLOW set computation.");
+    //     return;
+    // }
 
-    logFile << "FOLLOW Set Computation Log\n";
-    logFile << "===========================\n";
+    // logFile << "FOLLOW Set Computation Log\n";
+    // logFile << "===========================\n";
 
     while (changed) {
         changed = false;
-        logFile << "Iteration " << ++iteration << ":\n";
+        // logFile << "Iteration " << ++iteration << ":\n";
 
         // 遍历所有规则
         for (const auto& [lhs, productions] : rules) {
@@ -290,20 +290,20 @@ void Grammar::computeFollowSet() const {
                 for (size_t i = 0; i < production.size(); ++i) {
                     const std::string& symbol = production[i];
                     if (isNonTerminal(symbol)) {
-                        logFile << "Processing non-terminal: " << symbol << " in production: " 
-                                << lhs << " -> " << join(production, " ") << "\n";
+                        // logFile << "Processing non-terminal: " << symbol << " in production: " 
+                                // << lhs << " -> " << join(production, " ") << "\n";
                         // 检查后续符号
                         if (i + 1 < production.size()) {
                             bool addFollow = true;
-                            int pos = i + 1;
+                            size_t pos = i + 1;
                             while(pos < production.size() && addFollow){
                                 const std::string& nextSymbol = production[pos];
                                 if (isTerminal(nextSymbol)) {
                                     // 如果后续符号是终结符，直接加入 FOLLOW 集
                                     if (followSets[symbol].insert(nextSymbol).second) {
                                         changed = true;
-                                        logFile << "  Added terminal " << nextSymbol 
-                                                << " to FOLLOW(" << symbol << ")\n";
+                                        // logFile << "  Added terminal " << nextSymbol 
+                                        //         << " to FOLLOW(" << symbol << ")\n";
                                     }
                                     break;
                                 } else if (isNonTerminal(nextSymbol)) {
@@ -313,9 +313,9 @@ void Grammar::computeFollowSet() const {
                                         if (!isEpsilon(sym)) {
                                             if (followSets[symbol].insert(sym).second) {
                                                 changed = true;
-                                                logFile << "  Added FIRST(" << nextSymbol 
-                                                << ") element " << sym 
-                                                << " to FOLLOW(" << symbol << ")\n";
+                                                // logFile << "  Added FIRST(" << nextSymbol 
+                                                // << ") element " << sym 
+                                                // << " to FOLLOW(" << symbol << ")\n";
                                             }
                                         }
                                     }
@@ -331,9 +331,9 @@ void Grammar::computeFollowSet() const {
                             for (const auto& followSym : followSets[lhs]) {
                                 if (followSets[symbol].insert(followSym).second) {
                                     changed = true;
-                                    logFile << "  Added FOLLOW(" << lhs 
-                                    << ") element " << followSym 
-                                    << " to FOLLOW(" << symbol << ")\n";
+                                    // logFile << "  Added FOLLOW(" << lhs 
+                                    // << ") element " << followSym 
+                                    // << " to FOLLOW(" << symbol << ")\n";
                                 }
                             }
                         }
@@ -342,15 +342,15 @@ void Grammar::computeFollowSet() const {
             }
         }
         // 输出当前 FOLLOW 集状态
-        logFile << "Current FOLLOW sets after iteration " << iteration << ":\n";
-        for (const auto& [nonTerminal, followSet] : followSets) {
-            logFile << "  FOLLOW(" << nonTerminal << ") = { " 
-                    << join(followSet, ", ") << " }\n";
-        }
-        logFile << "-----------------------------------\n";
+        // logFile << "Current FOLLOW sets after iteration " << iteration << ":\n";
+        // for (const auto& [nonTerminal, followSet] : followSets) {
+        //     logFile << "  FOLLOW(" << nonTerminal << ") = { " 
+        //             << join(followSet, ", ") << " }\n";
+        // }
+        // logFile << "-----------------------------------\n";
     }
-    logFile << "FOLLOW set computation completed.\n";
-    logFile.close();
+    // logFile << "FOLLOW set computation completed.\n";
+    // logFile.close();
     DEBUG_INFO("FOLLOW set computation log written to follow_set_log.txt");
 }
 
