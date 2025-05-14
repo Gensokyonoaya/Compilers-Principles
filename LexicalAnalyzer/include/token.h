@@ -2,7 +2,7 @@
 #define TOKEN_H
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 enum class TokenType {
     KEYWORD,        // 关键字
@@ -16,6 +16,8 @@ enum class TokenType {
 };
 
 enum TokenCode {
+    UNDEFINE = 0, // 未定义
+
     KW_INT = 1,
     KW_VOID,
     KW_RETURN,
@@ -56,7 +58,8 @@ enum TokenCode {
 };
 
 // 声明 tokenCodeMap
-extern std::map<std::string, int> tokenCodeMap;
+extern std::unordered_map<std::string, TokenCode> tokenCodeMap;
+extern std::unordered_map<TokenCode, std::string> tokenCodeToStringMap;
 
 class Token {
 public:
@@ -64,6 +67,7 @@ public:
 
     TokenType get_type() const;
     std::string get_value() const;
+    TokenCode get_code() const;
 
     // 将 Token 转换为字符串表示
     std::string to_string() const;
@@ -71,7 +75,7 @@ public:
 private:
     TokenType type;
     std::string value;
-
+    TokenCode code;
     // 将 TokenType 转换为字符串
     static std::string token_type_to_string(TokenType type);
 };

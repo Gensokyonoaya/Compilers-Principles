@@ -305,9 +305,11 @@ void Grammar::computeFollowSet() const {
                                         // logFile << "  Added terminal " << nextSymbol 
                                         //         << " to FOLLOW(" << symbol << ")\n";
                                     }
+                                    addFollow = false; // 终结符，停止
                                     break;
                                 } else if (isNonTerminal(nextSymbol)) {
                                     // 如果后续符号是非终结符，将其 FIRST 集（不含 ε）加入 FOLLOW 集
+                                    bool haveEpsilon = 0;
                                     const auto& firstSetOfNext = firstSets[nextSymbol];
                                     for (const auto& sym : firstSetOfNext) {
                                         if (!isEpsilon(sym)) {
@@ -317,14 +319,26 @@ void Grammar::computeFollowSet() const {
                                                 // << ") element " << sym 
                                                 // << " to FOLLOW(" << symbol << ")\n";
                                             }
+                                        } else {
+                                            haveEpsilon = 1; // 发现 ε
                                         }
                                     }
                                     // 如果 FIRST 集包不含 ε，
-                                    if (firstSetOfNext.find("$") == firstSetOfNext.end()) {
+                                    if (!haveEpsilon) {
                                         addFollow = false;
                                     }
                                 }
                                 pos++;
+                            }
+                            if (addFollow) {
+                                for (const auto& followSym : followSets[lhs]) {
+                                    if (followSets[symbol].insert(followSym).second) {
+                                        changed = true;
+                                        // logFile << "  Added FOLLOW(" << lhs 
+                                        // << ") element " << followSym 
+                                        // << " to FOLLOW(" << symbol << ")\n";
+                                    }
+                                }
                             }
                         } else {
                             // 如果是最后一个符号，将 FOLLOW(lhs) 加入 FOLLOW(symbol)

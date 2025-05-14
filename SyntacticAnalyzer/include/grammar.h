@@ -10,7 +10,7 @@
 #include <set>
 #include <algorithm>
 #include <cctype>
-#include "utils.h"
+#include "../../LexicalAnalyzer/include/utils.h"
 
 using Production = std::vector<std::string>;
 using SelectSets = std::map<std::pair<std::string, Production>, std::set<std::string>>;

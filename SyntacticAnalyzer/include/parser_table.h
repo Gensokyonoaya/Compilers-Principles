@@ -5,9 +5,9 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "../include/token.h"
-#include "../include/grammar.h"
-#include "../include/utils.h"
+#include "../../LexicalAnalyzer/include/token.h"
+#include "grammar.h"
+#include "../../LexicalAnalyzer/include/utils.h"
 
 using ParseTable = std::map<std::pair<std::string, std::string>, Production>; // 预测分析表类型
 class ParserTable {

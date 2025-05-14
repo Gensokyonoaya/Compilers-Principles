@@ -1,7 +1,7 @@
-#include "token.h"
+#include "../include/token.h"
 #include <sstream>
 
-std::map<std::string, int> tokenCodeMap = {
+std::unordered_map<std::string, TokenCode> tokenCodeMap = {
     {"int", TokenCode::KW_INT}, // 关键字 int enum = 1
     {"void", TokenCode::KW_VOID}, // 关键字 void enum = 2
     {"return", TokenCode::KW_RETURN}, // 关键字 return enum = 3
@@ -41,8 +41,58 @@ std::map<std::string, int> tokenCodeMap = {
     {"EOF", TokenCode::END_OF_FILE} // 文件结束符, enum = 100
 };
 
+std::unordered_map<TokenCode, std::string> tokenCodeToStringMap = {
+    {TokenCode::KW_INT, "int"},
+    {TokenCode::KW_VOID, "void"},
+    {TokenCode::KW_RETURN, "return"},
+    {TokenCode::KW_CONST, "const"},
+    {TokenCode::KW_MAIN, "main"},
+    {TokenCode::KW_FLOAT, "float"},
+    {TokenCode::KW_IF, "if"},
+    {TokenCode::KW_ELSE, "else"},
+    {TokenCode::OP_PLUS, "+"},
+    {TokenCode::OP_MINUS, "-"},
+    {TokenCode::OP_MULTIPLY, "*"},
+    {TokenCode::OP_DIVIDE, "/"},
+    {TokenCode::OP_PERCENT, "%"},
+    {TokenCode::OP_ASSIGN, "="},
+    {TokenCode::OP_GT, ">"},
+    {TokenCode::OP_LT, "<"},
+    {TokenCode::OP_EQUAL, "=="},
+    {TokenCode::OP_LEQ, "<="},
+    {TokenCode::OP_GEQ, ">="},
+    {TokenCode::OP_NEQ, "!="},
+    {TokenCode::OP_AND, "&&"},
+    {TokenCode::OP_OR, "||"},
+    {TokenCode::SE_LPARENT, "("},
+    {TokenCode::SE_RPARENT, ")"},
+    {TokenCode::SE_LBRACES, "{"},
+    {TokenCode::SE_RBARCES, "}"},
+    {TokenCode::SE_SEMICOLON, ";"},
+    {TokenCode::SE_COMMA, ","},
+    {TokenCode::INT_CONST, "INT"},
+    {TokenCode::FLOAT_CONST, "FLOAT"},
+    {TokenCode::IDNTIFIER, "IDN"},
+    {TokenCode::END_OF_FILE, "EOF"}
+};
+
 // 构造函数
-Token::Token(TokenType type, const std::string& value) : type(type), value(value) {}
+Token::Token(TokenType type, const std::string& value) : type(type), value(value) {
+    // 初始化code
+    if((type == TokenType::IDENTIFIER)) {
+        code = tokenCodeMap["IDN"];
+    } else if (type == TokenType::FLOAT) {
+        code = tokenCodeMap["FLOAT"];
+    } else if (type == TokenType::INTEGER) {
+        code = tokenCodeMap["INT"];
+    } else {
+        if (tokenCodeMap.find(value) == tokenCodeMap.end()) {
+            code = UNDEFINE; // 如果没有找到，设置为 0
+        } else {
+            code = tokenCodeMap[value]; // 获取 Token 的类别
+        }
+    }
+}
 
 // 获取 Token 类型
 TokenType Token::get_type() const {
@@ -52,6 +102,10 @@ TokenType Token::get_type() const {
 // 获取 Token 值
 std::string Token::get_value() const {
     return value;
+}
+
+TokenCode Token::get_code() const {
+    return code;
 }
 
 // 将 Token 转换为字符串表示

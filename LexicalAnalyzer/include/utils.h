@@ -2,9 +2,16 @@
 #define UTILS_H
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <set>
 
 // 日志开关：设置为 1 启用日志，设置为 0 禁用日志
-#define ENABLE_LOG 0
+#define ENABLE_LOG 1
 
 #if ENABLE_LOG
     #define LOG(level, message) \
@@ -22,4 +29,8 @@
     #define DEBUG_INFO(message) // 空实现，禁用信息日志
 #endif
 
-#endif
+void trim(std::string& str);
+std::vector<std::string> splitIntoSymbols(const std::string& segment);
+
+
+#endif // UTILS_H
