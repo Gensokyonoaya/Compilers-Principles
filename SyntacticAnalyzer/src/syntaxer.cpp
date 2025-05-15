@@ -15,7 +15,7 @@ void SyntaxAnalyzer::parse() {
     size_t index = 0; // 当前分析的token索引
     Token currentToken = tokens[index]; // 当前token
 
-    bool MAINdef = false; // 是否定义了main函数
+    MAINdef = false; // 是否定义了main函数
     size_t step = 1; // 步骤编号
 
     while (!parseStack.empty()) {
@@ -35,31 +35,26 @@ void SyntaxAnalyzer::parse() {
 
             if (currentToken.get_code() == TokenCode::UNDEFINE) {
                 DEBUG_ERROR("Undefined token: " + currentToken.get_value());
-                currentStep.action = "error";
-                steps.push_back(currentStep);
+                handleError(currentStep);
                 return;
             }
 
             if (topCode == TokenCode::END_OF_FILE && currentToken.get_code() == TokenCode::END_OF_FILE) {
                 // 语法分析成功
                 DEBUG_INFO("Syntax analysis successful.");
-                currentStep.action = "accept";
-                steps.push_back(currentStep);
+                handleAccept(currentStep);
                 return;
             }
 
             if (topCode == currentToken.get_code()) { // 如果栈顶元素和当前token匹配
-                DEBUG_INFO("Matched token: " + currentToken.to_string());
                 index++;
                 if (index < tokens.size()) {
                     currentToken = tokens[index];
                 }
-                currentStep.action = "move";
-                steps.push_back(currentStep);
+                handleMove(currentStep);
             } else {
                 DEBUG_ERROR("Syntax error: Expected " + top + ", but found " + currentToken.to_string());
-                currentStep.action = "error";
-                steps.push_back(currentStep);
+                handleError(currentStep);
                 return;
             }
         } else if (top !="compUnitItem" && 
@@ -67,47 +62,39 @@ void SyntaxAnalyzer::parse() {
                     // 如果栈顶元素是非终结符
             Production production = parserTable.getParseTable().at({top, tokenCodeToStringMap[currentToken.get_code()]});
             
-            currentStep.action = "reduction";
-            steps.push_back(currentStep);
+            handleReduction(currentStep);
             
             for (auto it = production.rbegin(); it != production.rend(); ++it) {
                 parseStack.push(*it); // 将产生式右部逆序压入栈中
             }
         } else if (top == "$") {
             // 空产生式
-            currentStep.action = "reduction";
-            steps.push_back(currentStep);
+            handleReduction(currentStep);
         } else {
             // 手动处理非 LL(1) 的文法规则
             if (top == "elseStmtOpt") {
                 if (currentToken.get_code() == TokenCode::KW_ELSE) {
                     parseStack.push("stmt");
                     parseStack.push("else");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
                 } else {
                     parseStack.push("$");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
                 }
+                handleReduction(currentStep);
 
             } else if (top == "compUnitItem") {
                 //识别main函数，这里是分析compUnitItem -> decl | funcDef时走了varDecl，需要回溯到funcDef
                 if (tryMatchFuncDef(index)) {
                     parseStack.push("funcDef");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
+                    handleReduction(currentStep);
                 } else if (currentToken.get_code() == TokenCode::KW_INT ||
                            currentToken.get_code() == TokenCode::KW_CONST ||
                            currentToken.get_code() == TokenCode::KW_FLOAT) 
                 {
                     parseStack.push("decl");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
+                    handleReduction(currentStep);
                 } else {
                     DEBUG_ERROR("Syntax error: Expected 'int', 'void', 'const', or 'float', but found " + currentToken.to_string());
-                    currentStep.action = "error";
-                    steps.push_back(currentStep);
+                    handleError(currentStep);
                     return;
                 }
 
@@ -120,12 +107,10 @@ void SyntaxAnalyzer::parse() {
                     parseStack.push("(");
                     parseStack.push("Ident");
                     parseStack.push("funcType");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
+                    handleReduction(currentStep);
                 } else {
                     DEBUG_ERROR("Syntax error: Expected function definition, but found " + currentToken.to_string());
-                    currentStep.action = "error";
-                    steps.push_back(currentStep);
+                    handleError(currentStep);
                     return;
                 }
 
@@ -133,17 +118,10 @@ void SyntaxAnalyzer::parse() {
                 //funcType -> int | void
                 if (currentToken.get_code() == TokenCode::KW_INT) {
                     parseStack.push("int");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
-                } 
-                // else if (currentToken.get_code() == TokenCode::KW_VOID) {
-                //     parseStack.push("void");
-                //     currentStep.action = "reduction";
-                //     steps.push_back(currentStep);}
-                else {
+                    handleReduction(currentStep);
+                } else {
                     DEBUG_ERROR("Syntax error: Expected function type, but found " + currentToken.to_string());
-                    currentStep.action = "error";
-                    steps.push_back(currentStep);
+                    handleError(currentStep);
                     return;
                 }
 
@@ -152,24 +130,20 @@ void SyntaxAnalyzer::parse() {
                 if (currentToken.get_code() == TokenCode::KW_MAIN && !MAINdef) {
                     MAINdef = true; // 只允许一个main函数
                     parseStack.push("main");
-                    currentStep.action = "reduction";
-                    steps.push_back(currentStep);
+                    handleReduction(currentStep);
                 } else if (currentToken.get_code() == TokenCode::KW_MAIN && MAINdef) {
                     DEBUG_ERROR("Syntax error: Multiple definitions of main function");
-                    currentStep.action = "error";
-                    steps.push_back(currentStep);
+                    handleError(currentStep);
                     return;
                 } else {
                     DEBUG_ERROR("Syntax error: Expected identifier, but found " + currentToken.to_string());
-                    currentStep.action = "error";
-                    steps.push_back(currentStep);
+                    handleError(currentStep);
                     return;
                 }
 
             } else {
                 DEBUG_ERROR("Syntax error: Unexpected token " + currentToken.to_string());
-                currentStep.action = "error";
-                steps.push_back(currentStep);
+                handleError(currentStep);
                 return;
             }
         }
