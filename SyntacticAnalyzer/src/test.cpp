@@ -29,8 +29,10 @@ int main() {
 
     Lexer lexer(source_code);
 
+    lexer.print_tokens(); // 输出 Token 序列
+
     SyntaxAnalyzer syntaxAnalyzer(lexer.get_tokens());
-    syntaxAnalyzer.printSteps();
+    syntaxAnalyzer.printSteps(); // 打印推导步骤
 
     // 创建 ParserTable 对象
     //ParserTable parserTable;
