@@ -11,11 +11,13 @@
 - 支持关键字、标识符、运算符、整数、浮点数和界符的识别。
 - 使用有限自动机 (Finite Automaton) 实现词法分析。
 - 支持错误处理，能够识别未定义的 Token。
+- 支持将 Token 序列输出到文件。
 
 ### 2. **语法分析器 (SyntacticAnalyzer)**
 - 负责根据上下文无关文法对 Token 序列进行语法分析(部分文法为手动分析)。
 - 构建抽象语法树 (AST)。
 - 支持语法错误检测。
+- 支持推导步骤输出到文件。
 - 符号表管理
   - 支持嵌套作用域符号表的构建和管理。
   - 提供符号的插入、查询、更新和删除功能。
@@ -26,86 +28,107 @@
 
 ---
 
-## 目录结构描述
-    ├── README.md           // 帮助文档
-    
-    ├── 24-25+第二学期编译原理大作业要求.docx    // 大作业要求
-    
-    ├── LexicalAnalyzer             // 词法分析器
-    
-    │	├── include     // 词法分析器include文件夹
+## 目录结构
 
-	│		├── lexer.h // 词法分析器头文件
+```
+├── README.md                        // 帮助文档
+├── 24-25+第二学期编译原理大作业要求.docx  // 大作业要求
+├── LexicalAnalyzer                  // 词法分析器
+│   ├── include
+│   │   ├── lexer.h
+│   │   ├── token.h
+│   │   ├── finite_automaton.h
+│   │   └── utils.h
+│   └── src
+│       ├── lexer.cpp
+│       ├── token.cpp
+│       ├── finite_automaton.cpp
+│       └── utils.cpp
+├── SyntacticAnalyzer                // 语法分析器
+│   ├── include
+│   │   ├── symbol_table.h
+│   │   ├── grammar.h
+│   │   ├── parser_table.h
+│   │   └── syntaxer.h
+│   ├── src
+│   │   ├── symbol_table.cpp
+│   │   ├── grammar.cpp
+│   │   ├── parser_table.cpp
+│   │   └── syntaxer.cpp
+│   └── makefile                     // 编译脚本
+├── test
+│	├── samples                          // 测试样例输入文件夹
+│   │	├── test1.sy
+│   │	├── test2.sy
+│   │	└── ...                          // 更多测试用例
+│	├── outputs                          // 输出文件夹
+│   │	├── test1_tokens.txt
+│   │	├── test1_syntax.txt
+│   │	└── ...                          // 更多输出
+│   ├── grammar.ini                     // 文法配置
+│   ├── test.cpp                     // 测试主程序
+│   └── makefile                     // 测试编译脚本
 
-	│		├── token.h // Token 定义头文件
-
-	│		├── finite_automaton.h // 有限自动机头文件
-
-	│		└── utils.h // 工具函数头文件
-
-    │	└── src     // 词法分析器src文件夹
-
-	│		├── lexer.cpp // 词法分析器实现
-
-	│		├── token.cpp // Token 实现
-
-	│		├── finite_automaton.cpp // 有限自动机实现
-
-	│		└── utils.cpp // 工具函数实现
-
-	│	
-
-    ├── SyntacticAnalyzer             // 语法分析器
-
-	│   ├── include     // 语法分析器include文件夹
-
-	│		├── symbol_table.h // TODO：符号表头文件
-
-	│		├── grammar.h // 文法头文件（FIRST集、FOLLOW集、SELECT集）
-
-	│		├── parser_table.h // 预测分析表头文件
-
-	│		└── syntaxer.h // 语法分析器头文件
-
-	│   ├── src     // 语法分析器src文件夹
-    
-	│		├── symbol_table.cpp // TODO：符号表实现 
-
-	│		├── grammar.cpp // 文法实现（FIRST集、FOLLOW集、SELECT集）
-
-	│		├── parser_table.cpp // 预测分析表实现
-
-	│		├── syntaxer.cpp // 语法分析器实现
-
-	│		└── test.cpp // 测试用例
-
-	│	└── makefile //编译生成测试程序
-
-    └──                 // 
+```
 
 ---
 
 ## 使用方法
-### 1. **环境要求**
+### 1. 环境要求
 - 编译器：`g++` (支持 C++17 标准)
 - 构建工具：`make`
 - 操作系统：Windows
 
-### 2. **构建项目**
-在 `SyntacticAnalyzer` 目录下运行以下命令：
+### 2. 构建项目
+进入 `test` 目录，运行以下命令：
+
 ```bash
 make
 ```
-成功后会生成可执行文件 syntaxer.exe。
-### 3. **运行词法分析器和语法分析器**
-运行以下命令：
+编译成功后会生成可执行文件 `syntaxer.exe`。
+
+### 3. 运行测试
+将你的测试样例（如 `test1.sy`）放入 `samples` 文件夹下。运行：
+
 ```bash
 ./syntaxer.exe
 ```
+根据提示输入测试文件名（如 `test1.sy`），程序会自动读取 `samples/test1.sy`，并将词法分析和语法分析结果分别输出到 `outputs/test1_tokens.txt` 和 `outputs/test1_syntax.txt`。
 
-### 4. **清理构建文件**
-运行以下命令清理生成的中间文件和可执行文件：
+### 4. 清理构建文件和输出
+清理中间文件和可执行文件：
+
 ```bash
 make clean
 ```
+清空 `outputs` 文件夹下的所有输出文件（不删除文件夹本身）：
+
+```bash
+make cleanout
+```
+
+---
+
+## 输入输出说明
+
+- **输入**：`samples` 文件夹下的 `.sy` 源代码文件。
+- **输出**：`outputs` 文件夹下生成对应的 `_tokens.txt`（词法分析结果）和 `_syntax.txt`（语法分析推导步骤）。
+
+---
+
+## 样例说明
+
+假设有 `samples/test1.sy` 文件，内容如下：
+
+```c
+int main() {
+    int a = 1;
+    return a;
+}
+```
+
+运行后会在 `outputs/` 目录下生成：
+- `test1_tokens.txt`：每行一个 Token 的类型和值
+- `test1_syntax.txt`：语法分析推导步骤
+
 ---
