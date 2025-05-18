@@ -48,6 +48,7 @@ enum TokenCode {
     OP_NEQ,
     OP_AND,
     OP_OR,
+    OP_NOT,
 
     INT_CONST = 50, // 整数常量
     FLOAT_CONST,    // 浮点数常量

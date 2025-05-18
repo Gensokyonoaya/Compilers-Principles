@@ -13,6 +13,7 @@ public:
     Lexer(const std::string& source);
     std::vector<Token> tokenize();
     void print_tokens(); // 输出 Token 序列
+    void save_tokens_to_file(const std::string& filename) const; // 保存 Token 序列到文件
     const std::vector<Token>& get_tokens() const { return tokens; } // 获取 Token 序列
     const std::string& get_source_code() const { return source_code; } // 获取源代码
 

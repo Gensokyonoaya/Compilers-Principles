@@ -15,13 +15,13 @@ void Lexer::initialize_automaton() {
     fa.add_state(3, true, "FLOAT");      // 浮点数终止状态
     fa.add_state(4, true, "SYMBOL_OF_END"); // 界符终止状态
 
-    fa.add_state(6, true, "OPERATOR"); // 单字符运算符+-*、%终止状态
+    fa.add_state(6, true, "OPERATOR"); // 单字符运算符+-*/%终止状态
     fa.add_state(7, true, "OPERATOR"); // 双字符运算符终止状态
 
     fa.add_state(8, true, "OPERATOR"); // 运算符=状态
     fa.add_state(9, true, "OPERATOR"); // 运算符<状态
     fa.add_state(10, true, "OPERATOR"); // 运算符>状态
-    fa.add_state(11, false, "OPERATOR_!"); // 运算符!状态
+    fa.add_state(11, true, "OPERATOR"); // 运算符!状态
     fa.add_state(12, false, "OPERATOR_&"); // 运算符&状态
     fa.add_state(13, false, "OPERATOR_|"); // 运算符|状态
 
@@ -161,6 +161,9 @@ std::vector<Token> Lexer::tokenize() {
         }
         tokens.push_back(token);
     }
+    if (tokens.back().get_type() != TokenType::END_OF_FILE) {
+        tokens.push_back(Token(TokenType::END_OF_FILE, "EOF")); // 添加文件结束符 Token
+    }
     return tokens;
 }
 
@@ -168,4 +171,16 @@ void Lexer::print_tokens() {
     for (const Token& token : tokens) {
         std::cout << token.to_string() << std::endl; // 输出每个 Token 的字符串表示
     }
+}
+
+void Lexer::save_tokens_to_file(const std::string& filename) const {
+    std::ofstream ofs(filename);
+    if (!ofs) {
+        std::cerr << "无法打开文件: " << filename << std::endl;
+        return;
+    }
+    for (const Token& token : tokens) {
+        ofs << token.to_string() << std::endl;
+    }
+    ofs.close();
 }

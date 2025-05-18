@@ -26,11 +26,11 @@ void FiniteAutomaton::set_start_state(int id) {
 // 获取 DFA 的下一个状态
 int FiniteAutomaton::get_next_state(int current_state, char input) const {
     if (transitions.find(current_state) == transitions.end()) {
-        DEBUG_ERROR("State " + std::to_string(current_state) + " not found in transitions.");
+        //DEBUG_ERROR("State " + std::to_string(current_state) + " not found in transitions.");
         return -1;
     }
     if (transitions.at(current_state).find(input) == transitions.at(current_state).end()) {
-        DEBUG_ERROR("Input '" + std::string(1, input) + "' not found for state " + std::to_string(current_state) + ".");
+        //DEBUG_ERROR("Input '" + std::string(1, input) + "' not found for state " + std::to_string(current_state) + ".");
         return -1;
     }
     return transitions.at(current_state).at(input);

@@ -1,0 +1,9 @@
+int a;
+int b;
+void func(){
+	a=10;
+	b=0;
+	if(a!=b)
+		a=!b;
+	return 0;
+}

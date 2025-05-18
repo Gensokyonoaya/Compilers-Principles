@@ -26,6 +26,21 @@ public:
                       << step.action << "\n";
         }
     }
+    void save_steps_to_file(const std::string& filename) const {
+        std::ofstream file(filename);
+        if (!file) {
+            std::cerr << "无法打开文件: " << filename << std::endl;
+            return;
+        }
+        for (const auto& step : steps) {
+            file << step.step << "\t"
+                 << step.stackTop << "#"
+                 << step.lookahead << "\t"
+                 << step.action << "\n";
+        }
+        file.close();
+    }
+
     bool tryMatchFuncDef(size_t& index);
 
     void updateStep(AnalysisStep& step, const std::string& action) {

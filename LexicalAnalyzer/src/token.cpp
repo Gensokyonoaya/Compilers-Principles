@@ -25,6 +25,7 @@ std::unordered_map<std::string, TokenCode> tokenCodeMap = {
     {"!=", TokenCode::OP_NEQ}, // 运算符 != enum = 41
     {"&&", TokenCode::OP_AND}, // 运算符 && enum = 42
     {"||", TokenCode::OP_OR}, // 运算符 || enum = 43
+    {"!", TokenCode::OP_NOT}, // 运算符 ! enum = 44
 
     {"(", TokenCode::SE_LPARENT}, // 界符 ( enum = 20
     {")", TokenCode::SE_RPARENT}, // 界符 ) enum = 21
@@ -64,6 +65,7 @@ std::unordered_map<TokenCode, std::string> tokenCodeToStringMap = {
     {TokenCode::OP_NEQ, "!="},
     {TokenCode::OP_AND, "&&"},
     {TokenCode::OP_OR, "||"},
+    {TokenCode::OP_NOT, "!"},
     {TokenCode::SE_LPARENT, "("},
     {TokenCode::SE_RPARENT, ")"},
     {TokenCode::SE_LBRACES, "{"},

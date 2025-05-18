@@ -71,6 +71,23 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "filesystem": "cpp"
+    },
+
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
+            "args": ["-NoExit", "chcp 65001"]
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": ["/K", "chcp 65001"],
+            "icon": "terminal-cmd"
+        }
     }
 }
