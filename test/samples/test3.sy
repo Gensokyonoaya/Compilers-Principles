@@ -1,0 +1,16 @@
+int x = 3;
+int y = 5;
+
+int func()
+{
+    int a = x + y;
+    int b = x - y;
+    int c = x * y;
+    int d = x / y;
+    int e = x % y;
+    int f = x && y;
+    int g = x || y;
+    int h = !x;
+
+    return 0;
+}

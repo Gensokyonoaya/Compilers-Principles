@@ -20,6 +20,8 @@ int main() {
     }
     std::string token_output = output_dir + "/" + basename + "_tokens.txt";
     std::string syntax_output = output_dir + "/" + basename + "_syntax.txt";
+    std::string parseTree_output = output_dir + "/" + basename + "_parseTree.txt";
+
     std::ifstream file(filepath);
     if (!file) {
         std::cerr << "Can not open file: " << filepath << std::endl;
@@ -37,13 +39,26 @@ int main() {
 
     SyntaxAnalyzer syntaxAnalyzer(lexer.get_tokens());
     //syntaxAnalyzer.printSteps(); // 打印推导步骤
+    DEBUG_INFO("Syntax analysis steps:");
     syntaxAnalyzer.save_steps_to_file(syntax_output); // 保存推导步骤到文件
+    DEBUG_INFO("Syntax analysis tree:");
+    std::ofstream parseTreeFile(parseTree_output);
+    if (!parseTreeFile) {
+        std::cerr << "无法打开文件: " << parseTree_output << std::endl;
+        return 1;
+    }
+    syntaxAnalyzer.getParseTree()->printNode(parseTreeFile); // 打印语法树到文件
+    parseTreeFile.close();
+    //syntaxAnalyzer.getParseTree()->printNode(); // 打印语法树
+    DEBUG_INFO("AST:");
+    std::string ast_output = output_dir + "/" + basename + "_ast.txt";
+    syntaxAnalyzer.saveASTToFile(ast_output); // 保存 AST 到文件
 
     // 创建 ParserTable 对象
     //ParserTable parserTable;
 
     //Grammar g = parserTable.getGrammar();
-    // g.printGrammar();
+    //g.printGrammar();
     //g.printFirstSets();
     //g.printFollowSets();
     //g.printSelectSets();

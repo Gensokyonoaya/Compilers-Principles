@@ -1,6 +1,7 @@
 float a = 3.0;
 float b = 5.0;
 
-void func(){
+int func()
+{
     return a + b;
 }

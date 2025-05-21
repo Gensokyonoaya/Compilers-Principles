@@ -460,3 +460,54 @@ void Grammar::analyzeIsLL1(){
         }
     }
 }
+
+void Grammar::saveFirstSetsToFile(const std::string& filename) const {
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+    for (const auto& [nonTerminal, firstSet] : firstSets) {
+        outFile << "FIRST(" << nonTerminal << ") = { ";
+        for (const auto& symbol : firstSet) {
+            outFile << symbol << " ";
+        }
+        outFile << "}\n";
+    }
+    outFile.close();
+}
+
+void Grammar::saveFollowSetsToFile(const std::string& filename) const {
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+    for (const auto& [nonTerminal, followSet] : followSets) {
+        outFile << "FOLLOW(" << nonTerminal << ") = { ";
+        for (const auto& symbol : followSet) {
+            outFile << symbol << " ";
+        }
+        outFile << "}\n";
+    }
+    outFile.close();
+}
+void Grammar::saveSelectSetsToFile(const std::string& filename) const {
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+    for (const auto& [pair, selectSet] : selectSets) {
+        outFile << "SELECT(" << pair.first << " -> ";
+        for (const auto& symbol : pair.second) {
+            outFile << symbol << " ";
+        }
+        outFile << ") = { ";
+        for (const auto& symbol : selectSet) {
+            outFile << symbol << " ";
+        }
+        outFile << "}\n";
+    }
+    outFile.close();
+}

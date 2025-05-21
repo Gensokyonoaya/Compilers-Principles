@@ -15,16 +15,23 @@
 
 ### 2. **语法分析器 (SyntacticAnalyzer)**
 - 负责根据上下文无关文法对 Token 序列进行语法分析(部分文法为手动分析)。
-- 构建抽象语法树 (AST)。
 - 支持语法错误检测。
 - 支持推导步骤输出到文件。
-- 符号表管理
+- **解析语法树 (Parse Tree)**：
+  - 构建解析语法树以表示程序的语法结构。
+  - 支持递归打印解析语法树，清晰展示程序的层次结构。
+  - 支持将解析语法树输出到文件，便于调试和分析。
+- **抽象语法树 (AST)**：
+  - 构建抽象语法树以表示程序的语义结构。
+  - 支持递归打印 AST，清晰展示程序的层次结构。
+  - 支持将 AST 输出到文件，便于调试和分析。
+- **符号表管理**：(暂未支持)
   - 支持嵌套作用域符号表的构建和管理。
   - 提供符号的插入、查询、更新和删除功能。
   - 支持变量和函数的声明与定义。
 
 ### 3. **代码生成**
-- 将抽象语法树翻译为 LLVM IR 代码。
+- 将抽象语法树翻译为 LLVM IR 代码。(暂未实现)
 
 ---
 
@@ -46,18 +53,22 @@
 │       └── utils.cpp
 ├── SyntacticAnalyzer                // 语法分析器
 │   ├── include
+│   │   ├── AST.h
 │   │   ├── symbol_table.h
 │   │   ├── grammar.h
 │   │   ├── parser_table.h
+│   │   ├── parseTree.h
 │   │   └── syntaxer.h
 │   ├── src
+│   │   ├── AST.cpp
 │   │   ├── symbol_table.cpp
 │   │   ├── grammar.cpp
 │   │   ├── parser_table.cpp
+│   │   ├── parseTree.cpp
 │   │   └── syntaxer.cpp
 │   └── makefile                     // 编译脚本
 ├── test
-│	├── samples                          // 测试样例输入文件夹
+│   ├── samples                          // 测试样例输入文件夹
 │   │	├── test1.sy
 │   │	├── test2.sy
 │   │	└── ...                          // 更多测试用例
@@ -93,7 +104,7 @@ make
 ```bash
 ./syntaxer.exe
 ```
-根据提示输入测试文件名（如 `test1.sy`），程序会自动读取 `samples/test1.sy`，并将词法分析和语法分析结果分别输出到 `outputs/test1_tokens.txt` 和 `outputs/test1_syntax.txt`。
+根据提示输入测试文件名（如 `test1.sy`），程序会自动读取 `samples/test1.sy`，并将词法分析、语法分析、解析语法树和 AST 结果分别输出到 `outputs/` 文件夹下。
 
 ### 4. 清理构建文件和输出
 清理中间文件和可执行文件：
@@ -101,7 +112,7 @@ make
 ```bash
 make clean
 ```
-清空 `outputs` 文件夹下的所有输出文件（不删除文件夹本身）：
+清空 `outputs` 文件夹下的所有输出文件以及文件夹本身：
 
 ```bash
 make cleanout
@@ -112,7 +123,12 @@ make cleanout
 ## 输入输出说明
 
 - **输入**：`samples` 文件夹下的 `.sy` 源代码文件。
-- **输出**：`outputs` 文件夹下生成对应的 `_tokens.txt`（词法分析结果）和 `_syntax.txt`（语法分析推导步骤）。
+- **输出**：`outputs` 文件夹下生成以下文件：
+  - `_tokens.txt`：词法分析结果，每行一个 Token 的类型和值。
+  - `_syntax.txt`：语法分析推导步骤。
+  - `_parseTree.txt`：解析语法树，清晰展示程序的语法结构。
+  - `_ast.txt`：抽象语法树，清晰展示程序的语义结构。
+- 
 
 ---
 
@@ -130,5 +146,7 @@ int main() {
 运行后会在 `outputs/` 目录下生成：
 - `test1_tokens.txt`：每行一个 Token 的类型和值
 - `test1_syntax.txt`：语法分析推导步骤
+- `test1_parseTree.txt`：解析语法树
+- `test1_ast.txt`：抽象语法树
 
 ---

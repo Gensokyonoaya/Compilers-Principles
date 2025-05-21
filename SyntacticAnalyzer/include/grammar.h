@@ -47,10 +47,16 @@ public:
     // Function to print the first sets
     void printFirstSets() const;
 
+    void saveFirstSetsToFile(const std::string& filename) const;
+
     // Function to print the follow sets
     void printFollowSets() const;
 
+    void saveFollowSetsToFile(const std::string& filename) const;
+
     void printSelectSets() const;
+
+    void saveSelectSetsToFile(const std::string& filename) const;
 
     // Function to check if a string is a terminal
     bool isTerminal(const std::string& symbol) const;

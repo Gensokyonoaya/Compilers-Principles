@@ -79,6 +79,7 @@ std::unordered_map<TokenCode, std::string> tokenCodeToStringMap = {
 };
 
 // 构造函数
+Token::Token() : type(TokenType::UNDEFINED), value(""), code(UNDEFINE) {} // 默认构造函数
 Token::Token(TokenType type, const std::string& value) : type(type), value(value) {
     // 初始化code
     if((type == TokenType::IDENTIFIER)) {
