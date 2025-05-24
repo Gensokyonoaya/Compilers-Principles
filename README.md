@@ -25,13 +25,10 @@
   - 构建抽象语法树以表示程序的语义结构。
   - 支持递归打印 AST，清晰展示程序的层次结构。
   - 支持将 AST 输出到文件，便于调试和分析。
-- **符号表管理**：(暂未支持)
-  - 支持嵌套作用域符号表的构建和管理。
-  - 提供符号的插入、查询、更新和删除功能。
-  - 支持变量和函数的声明与定义。
+- **符号表管理**：(未实现)
 
 ### 3. **代码生成**
-- 将抽象语法树翻译为 LLVM IR 代码。(暂未实现)
+- 将抽象语法树翻译为 LLVM IR 代码。(未实现)
 
 ---
 
@@ -54,25 +51,22 @@
 ├── SyntacticAnalyzer                // 语法分析器
 │   ├── include
 │   │   ├── AST.h
-│   │   ├── symbol_table.h
 │   │   ├── grammar.h
 │   │   ├── parser_table.h
 │   │   ├── parseTree.h
 │   │   └── syntaxer.h
-│   ├── src
-│   │   ├── AST.cpp
-│   │   ├── symbol_table.cpp
-│   │   ├── grammar.cpp
-│   │   ├── parser_table.cpp
-│   │   ├── parseTree.cpp
-│   │   └── syntaxer.cpp
-│   └── makefile                     // 编译脚本
+│   └── src
+│       ├── AST.cpp
+│       ├── grammar.cpp
+│       ├── parser_table.cpp
+│       ├── parseTree.cpp
+│       └── syntaxer.cpp
 ├── test
 │   ├── samples                          // 测试样例输入文件夹
 │   │	├── test1.sy
 │   │	├── test2.sy
 │   │	└── ...                          // 更多测试用例
-│	├── outputs                          // 输出文件夹
+│	  ├── outputs                          // 输出文件夹
 │   │	├── test1_tokens.txt
 │   │	├── test1_syntax.txt
 │   │	└── ...                          // 更多输出

@@ -88,6 +88,11 @@ public:
     virtual std::string nodeType() const override { return "Expr"; }
 };
 
+// 前向声明DeclStmt类
+class DeclStmt;
+
+// 前向声明TranslationUnitDecl类
+class FunctionDecl;
 class TranslationUnitDecl : public DeclContext {
 public:
     virtual ~TranslationUnitDecl() = default;
@@ -97,12 +102,12 @@ public:
     }
     virtual std::string nodeType() const override { return "TranslationUnitDecl"; }
 
-    virtual void print(std::ostream& os, const std::string& prefix = "", bool isLast = true) const override {
-        os << prefix << (isLast ? "└── " : "├── ") << "TranslationUnitDecl\n";
-        for (size_t i = 0; i < declarations.size(); ++i) {
-            declarations[i]->print(os, prefix + (isLast ? "    " : "│   "), i == declarations.size() - 1);
-        }
-    }
+    std::vector<std::unique_ptr<DeclStmt>> declStmts;  // 声明语句列表
+    std::vector<std::unique_ptr<FunctionDecl>> funcDecls;  // 函数声明列表
+    void addDeclStmt(std::unique_ptr<DeclStmt> declStmt);
+    void addFuncDecl(std::unique_ptr<FunctionDecl> funcDecl);
+
+    virtual void print(std::ostream& os, const std::string& prefix = "", bool isLast = true) const override;
 };
 
 // Declaration: Variable Declaration (e.g., int a;)
@@ -111,6 +116,7 @@ public:
     virtual ~VarDecl() = default;
     std::string name;
     std::unique_ptr<Type> type;
+    bool isDefined;  // 是否已定义
 
     VarDecl(std::string name, std::unique_ptr<Type> type)
         : name(std::move(name)), type(std::move(type)) {}

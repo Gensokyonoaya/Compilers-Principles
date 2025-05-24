@@ -107,7 +107,7 @@ private:
 
     std::stack<std::shared_ptr<ParseTreeNode>> parseTreeStack; // 语法分析树栈
 
-    std::shared_ptr<ASTNode> root; // 语法树的根节点
+    std::shared_ptr<TranslationUnitDecl> root; // 语法树的根节点
 
     std::vector<Token> tokens; // 词法分析器生成的 Token 序列
 

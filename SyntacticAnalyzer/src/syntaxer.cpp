@@ -7,7 +7,7 @@ SyntaxAnalyzer::SyntaxAnalyzer(const std::vector<Token>& tokens)
     DEBUG_INFO("Parser table initialized.");
     SyntaxAnalyzer::parse();
     DEBUG_INFO("Syntax analysis completed.");
-    root = buildAST(parseTree);
+    root = std::unique_ptr<TranslationUnitDecl>(static_cast<TranslationUnitDecl*>(buildAST(parseTree).release()));
     DEBUG_INFO("AST built successfully.");
 }
 
@@ -273,6 +273,7 @@ std::unique_ptr<ASTNode> SyntaxAnalyzer::buildAST(const std::shared_ptr<ParseTre
         std::unique_ptr<Type> returnType;
         std::vector<std::unique_ptr<ParmVarDecl>> params;
         std::unique_ptr<CompoundStmt> body;
+        bool isDefined = false;
 
         for (const auto& child : node->Children) {
             if (child->symbol == "funcType") {
@@ -291,6 +292,7 @@ std::unique_ptr<ASTNode> SyntaxAnalyzer::buildAST(const std::shared_ptr<ParseTre
             } else if (child->symbol == "block") {
                 // 处理函数体
                 body = std::unique_ptr<CompoundStmt>(static_cast<CompoundStmt*>(buildAST(child).release()));
+                isDefined = true; // 标记函数已定义
             }
         }
 
@@ -299,6 +301,7 @@ std::unique_ptr<ASTNode> SyntaxAnalyzer::buildAST(const std::shared_ptr<ParseTre
             funcDecl->addParam(std::move(param));
         }
         if (body) funcDecl->body = std::move(body);
+        funcDecl->isDefined = isDefined; // 设置函数是否已定义
         return funcDecl;
 
     } else if (node->symbol == "block") {
@@ -607,9 +610,15 @@ void SyntaxAnalyzer::extractCompUnitItems(const std::shared_ptr<ParseTreeNode>& 
     for (const auto& child : node->Children) {
         if (child->symbol == "compUnitItem") {
             // 处理 compUnitItem
-            auto item = buildAST(child->Children[0]); // decl 或 funcDef
+            auto item = buildAST(child->Children[0]); // DeclStmt 或 funcDef
             if (item) {
-                tu->addDecl(std::unique_ptr<Decl>(static_cast<Decl*>(item.release())));
+                if (item->nodeType() == "DeclStmt") {
+                    // 如果是 DeclStmt，添加到 TranslationUnitDecl
+                    tu->addDeclStmt(std::unique_ptr<DeclStmt>(static_cast<DeclStmt*>(item.release())));
+                } else if (item->nodeType() == "FunctionDecl") {
+                    // 如果是 FunctionDecl，添加到 TranslationUnitDecl
+                    tu->addFuncDecl(std::unique_ptr<FunctionDecl>(static_cast<FunctionDecl*>(item.release())));
+                }
             }
         } else if (child->symbol == "compUnit") {
             // 递归处理嵌套的 compUnit
