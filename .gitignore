@@ -1,0 +1,26 @@
+# Build artifacts
+*.o
+*.exe
+syntaxer
+test/syntaxer
+test/obj/
+test/outputs/
+
+# Temporary files
+*.tmp
+*.temp
+follow_set_log.txt
+
+# IDE and editor files
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Documentation build artifacts
+docs/_build/

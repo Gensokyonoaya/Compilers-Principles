@@ -1,0 +1,16 @@
+└── TranslationUnitDecl
+    └── FunctionDecl: main (ReturnType: int)
+        └── CompoundStmt
+            ├── DeclStmt
+            │   └── VarDecl: x (Type: int)
+            │       └── IntegerLiteral: 42
+            ├── DeclStmt
+            │   └── VarDecl: y (Type: float)
+            │       └── FloatingLiteral: 3.14
+            ├── BinaryOperator: =
+            │   ├── DeclRefExpr: x
+            │   └── BinaryOperator: +
+            │       ├── DeclRefExpr: y
+            │       └── IntegerLiteral: 1
+            └── ReturnStmt
+                └── DeclRefExpr: x

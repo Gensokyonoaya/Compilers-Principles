@@ -1,0 +1,170 @@
+Program
+└── compUnit
+    ├── compUnitItem
+    │   └── funcDef
+    │       ├── funcType
+    │       │   └── int (int)
+    │       ├── Ident
+    │       │   └── main (main)
+    │       ├── ( (()
+    │       ├── funcFParamsOpt
+    │       │   └── $
+    │       ├── ) ())
+    │       └── block
+    │           ├── { ({)
+    │           ├── blockItemList
+    │           │   ├── blockItem
+    │           │   │   └── decl
+    │           │   │       └── varDecl
+    │           │   │           ├── bType
+    │           │   │           │   └── int (int)
+    │           │   │           ├── varDef
+    │           │   │           │   ├── Ident
+    │           │   │           │   │   └── IDN (x)
+    │           │   │           │   └── verDefSuffix
+    │           │   │           │       ├── = (=)
+    │           │   │           │       └── initVal
+    │           │   │           │           └── exp
+    │           │   │           │               └── assignExp
+    │           │   │           │                   └── condExp
+    │           │   │           │                       └── lOrExp
+    │           │   │           │                           ├── lAndExp
+    │           │   │           │                           │   ├── eqExp
+    │           │   │           │                           │   │   ├── relExp
+    │           │   │           │                           │   │   │   ├── addExp
+    │           │   │           │                           │   │   │   │   ├── mulExp
+    │           │   │           │                           │   │   │   │   │   ├── unaryExp
+    │           │   │           │                           │   │   │   │   │   │   └── primaryExp
+    │           │   │           │                           │   │   │   │   │   │       └── number
+    │           │   │           │                           │   │   │   │   │   │           └── IntConst
+    │           │   │           │                           │   │   │   │   │   │               └── INT (42)
+    │           │   │           │                           │   │   │   │   │   └── mulExpList
+    │           │   │           │                           │   │   │   │   │       └── $
+    │           │   │           │                           │   │   │   │   └── addExpList
+    │           │   │           │                           │   │   │   │       └── $
+    │           │   │           │                           │   │   │   └── relExpList
+    │           │   │           │                           │   │   │       └── $
+    │           │   │           │                           │   │   └── eqExpList
+    │           │   │           │                           │   │       └── $
+    │           │   │           │                           │   └── lAndExpList
+    │           │   │           │                           │       └── $
+    │           │   │           │                           └── lOrExpList
+    │           │   │           │                               └── $
+    │           │   │           ├── varDefList
+    │           │   │           │   └── $
+    │           │   │           └── ; (;)
+    │           │   └── blockItemList
+    │           │       ├── blockItem
+    │           │       │   └── decl
+    │           │       │       └── varDecl
+    │           │       │           ├── bType
+    │           │       │           │   └── float (float)
+    │           │       │           ├── varDef
+    │           │       │           │   ├── Ident
+    │           │       │           │   │   └── IDN (y)
+    │           │       │           │   └── verDefSuffix
+    │           │       │           │       ├── = (=)
+    │           │       │           │       └── initVal
+    │           │       │           │           └── exp
+    │           │       │           │               └── assignExp
+    │           │       │           │                   └── condExp
+    │           │       │           │                       └── lOrExp
+    │           │       │           │                           ├── lAndExp
+    │           │       │           │                           │   ├── eqExp
+    │           │       │           │                           │   │   ├── relExp
+    │           │       │           │                           │   │   │   ├── addExp
+    │           │       │           │                           │   │   │   │   ├── mulExp
+    │           │       │           │                           │   │   │   │   │   ├── unaryExp
+    │           │       │           │                           │   │   │   │   │   │   └── primaryExp
+    │           │       │           │                           │   │   │   │   │   │       └── number
+    │           │       │           │                           │   │   │   │   │   │           └── floatConst
+    │           │       │           │                           │   │   │   │   │   │               └── FLOAT (3.14)
+    │           │       │           │                           │   │   │   │   │   └── mulExpList
+    │           │       │           │                           │   │   │   │   │       └── $
+    │           │       │           │                           │   │   │   │   └── addExpList
+    │           │       │           │                           │   │   │   │       └── $
+    │           │       │           │                           │   │   │   └── relExpList
+    │           │       │           │                           │   │   │       └── $
+    │           │       │           │                           │   │   └── eqExpList
+    │           │       │           │                           │   │       └── $
+    │           │       │           │                           │   └── lAndExpList
+    │           │       │           │                           │       └── $
+    │           │       │           │                           └── lOrExpList
+    │           │       │           │                               └── $
+    │           │       │           ├── varDefList
+    │           │       │           │   └── $
+    │           │       │           └── ; (;)
+    │           │       └── blockItemList
+    │           │           ├── blockItem
+    │           │           │   └── stmt
+    │           │           │       └── expStmt
+    │           │           │           ├── exp
+    │           │           │           │   └── assignExp
+    │           │           │           │       ├── lVal
+    │           │           │           │       │   └── Ident
+    │           │           │           │       │       └── IDN (x)
+    │           │           │           │       └── lValSuffix
+    │           │           │           │           ├── = (=)
+    │           │           │           │           └── assignExp
+    │           │           │           │               ├── lVal
+    │           │           │           │               │   └── Ident
+    │           │           │           │               │       └── IDN (y)
+    │           │           │           │               └── lValSuffix
+    │           │           │           │                   ├── postfixExpList
+    │           │           │           │                   │   └── $
+    │           │           │           │                   ├── mulExpList
+    │           │           │           │                   │   └── $
+    │           │           │           │                   ├── addExpList
+    │           │           │           │                   │   ├── addexpOp
+    │           │           │           │                   │   │   └── + (+)
+    │           │           │           │                   │   ├── addExpExp
+    │           │           │           │                   │   │   └── mulExp
+    │           │           │           │                   │   │       ├── unaryExp
+    │           │           │           │                   │   │       │   └── primaryExp
+    │           │           │           │                   │   │       │       └── number
+    │           │           │           │                   │   │       │           └── IntConst
+    │           │           │           │                   │   │       │               └── INT (1)
+    │           │           │           │                   │   │       └── mulExpList
+    │           │           │           │                   │   │           └── $
+    │           │           │           │                   │   └── addExpList
+    │           │           │           │                   │       └── $
+    │           │           │           │                   ├── relExpList
+    │           │           │           │                   │   └── $
+    │           │           │           │                   ├── eqExpList
+    │           │           │           │                   │   └── $
+    │           │           │           │                   ├── lAndExpList
+    │           │           │           │                   │   └── $
+    │           │           │           │                   └── lOrExpList
+    │           │           │           │                       └── $
+    │           │           │           └── ; (;)
+    │           │           └── blockItemList
+    │           │               ├── blockItem
+    │           │               │   └── stmt
+    │           │               │       ├── return (return)
+    │           │               │       ├── returnExpOpt
+    │           │               │       │   └── exp
+    │           │               │       │       └── assignExp
+    │           │               │       │           ├── lVal
+    │           │               │       │           │   └── Ident
+    │           │               │       │           │       └── IDN (x)
+    │           │               │       │           └── lValSuffix
+    │           │               │       │               ├── postfixExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               ├── mulExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               ├── addExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               ├── relExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               ├── eqExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               ├── lAndExpList
+    │           │               │       │               │   └── $
+    │           │               │       │               └── lOrExpList
+    │           │               │       │                   └── $
+    │           │               │       └── ; (;)
+    │           │               └── blockItemList
+    │           │                   └── $
+    │           └── } (})
+    └── compUnit
+        └── $

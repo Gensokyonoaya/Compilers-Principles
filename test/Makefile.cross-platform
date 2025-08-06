@@ -1,0 +1,144 @@
+# Cross-platform Makefile for C-- Compiler
+# Supports Windows, Linux, and macOS
+
+# Compiler settings
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2
+
+# Directory structure
+SRC_DIR := ../SyntacticAnalyzer/src
+LEX_SRC_DIR := ../LexicalAnalyzer/src
+INC_DIR := ../SyntacticAnalyzer/include
+LEX_INC_DIR := ../LexicalAnalyzer/include
+OBJ_DIR := obj
+OUTPUTS_DIR := outputs
+
+# Include paths
+INCLUDES := -I$(INC_DIR) -I$(LEX_INC_DIR)
+
+# Source files
+SYNTAX_SRCS := $(wildcard $(SRC_DIR)/*.cpp)
+LEX_SRCS := $(wildcard $(LEX_SRC_DIR)/*.cpp)
+TEST_SRC := test.cpp
+
+# Object files
+SYNTAX_OBJS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SYNTAX_SRCS))
+LEX_OBJS := $(patsubst $(LEX_SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(LEX_SRCS))
+TEST_OBJ := $(OBJ_DIR)/test.o
+ALL_OBJS := $(SYNTAX_OBJS) $(LEX_OBJS) $(TEST_OBJ)
+
+# Platform detection
+ifeq ($(OS),Windows_NT)
+    TARGET := syntaxer.exe
+    MKDIR = if not exist $(subst /,\,$(1)) mkdir $(subst /,\,$(1))
+    RMDIR = if exist $(subst /,\,$(1)) RD /S /Q $(subst /,\,$(1))
+    RM = if exist $(1) del $(1)
+else
+    TARGET := syntaxer
+    MKDIR = mkdir -p $(1)
+    RMDIR = rm -rf $(1)
+    RM = rm -f $(1)
+endif
+
+# Default target
+.PHONY: all clean cleanout help test
+
+all: $(TARGET)
+
+# Create target executable
+$(TARGET): $(ALL_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+	@echo "✅ Build successful! Executable: $(TARGET)"
+
+# Compile syntactic analyzer sources
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compile lexical analyzer sources  
+$(OBJ_DIR)/%.o: $(LEX_SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compile test file
+$(OBJ_DIR)/test.o: $(TEST_SRC) | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Create object directory
+$(OBJ_DIR):
+	@$(call MKDIR,$(OBJ_DIR))
+
+# Clean build artifacts
+clean:
+	@$(call RMDIR,$(OBJ_DIR))
+	@$(call RM,$(TARGET))
+	@echo "🧹 Build artifacts cleaned"
+
+# Clean output files
+cleanout:
+	@$(call RMDIR,$(OUTPUTS_DIR))
+	@echo "🗑️  Output files cleaned"
+
+# Clean everything
+distclean: clean cleanout
+	@echo "✨ Complete cleanup finished"
+
+# Run tests (if test samples exist)
+test: $(TARGET)
+	@echo "🧪 Running compiler tests..."
+	@if [ -f "samples/test0.sy" ]; then \
+		echo "test0.sy" | ./$(TARGET); \
+		echo "✅ Test completed - check outputs/ directory"; \
+	else \
+		echo "⚠️  No test files found in samples/ directory"; \
+	fi
+
+# Show help information
+help:
+	@echo "🚀 C-- Compiler Build System"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  all        - Build the compiler (default)"
+	@echo "  clean      - Remove build artifacts"
+	@echo "  cleanout   - Remove output files"
+	@echo "  distclean  - Clean everything"
+	@echo "  test       - Run compiler tests"
+	@echo "  help       - Show this help message"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make           # Build the compiler"
+	@echo "  make clean     # Clean build files"
+	@echo "  make test      # Run tests"
+	@echo ""
+	@echo "📁 Directory structure:"
+	@echo "  samples/     - Input source files (.sy)"
+	@echo "  outputs/     - Generated output files"
+	@echo "  obj/         - Compiled object files"
+
+# Development targets
+debug: CXXFLAGS += -g -DDEBUG
+debug: $(TARGET)
+	@echo "🐛 Debug build completed"
+
+release: CXXFLAGS += -O3 -DNDEBUG
+release: clean $(TARGET)
+	@echo "🚀 Release build completed"
+
+# Install dependencies (placeholder for future package management)
+deps:
+	@echo "📦 Checking dependencies..."
+	@echo "✅ C++17 compiler: $(CXX)"
+	@$(CXX) --version
+	@echo "✅ All dependencies satisfied"
+
+# Show project statistics
+stats:
+	@echo "📊 Project Statistics:"
+	@echo "Syntactic Analyzer: $$(find $(SRC_DIR) -name '*.cpp' -exec wc -l {} + | tail -1 | awk '{print $$1}') lines"
+	@echo "Lexical Analyzer:   $$(find $(LEX_SRC_DIR) -name '*.cpp' -exec wc -l {} + | tail -1 | awk '{print $$1}') lines"
+	@echo "Test Framework:     $$(wc -l < $(TEST_SRC)) lines"
+	@echo "Total Object Files: $$(echo $(ALL_OBJS) | wc -w)"
+	@echo "Header Files:       $$(find $(INC_DIR) $(LEX_INC_DIR) -name '*.h' | wc -l)"
+
+# Force rebuild
+rebuild: clean all
+
+.PHONY: debug release deps stats rebuild

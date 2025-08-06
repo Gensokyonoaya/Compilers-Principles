@@ -1,0 +1,15 @@
+// Example 2: Conditional Statements and Complex Expressions
+int main() {
+    const int threshold = 100;
+    float score = 85.5;
+    
+    if (score >= threshold) {
+        score = score * 1.1;
+    } else if (score >= 80) {
+        score = score + 5;
+    } else {
+        score = 0;
+    }
+    
+    return score;
+}

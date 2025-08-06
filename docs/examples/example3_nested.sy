@@ -1,0 +1,22 @@
+// Example 3: Nested Control Structures
+int main() {
+    int a = 10;
+    int b = 20;
+    int result = 0;
+    
+    if (a < b) {
+        if (a > 0) {
+            if (b > 10) {
+                result = a + b;
+            } else {
+                result = a - b;
+            }
+        } else {
+            result = -1;
+        }
+    } else {
+        result = a * b;
+    }
+    
+    return result;
+}
